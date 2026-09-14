@@ -11,3 +11,10 @@
 - **Commands Learned:** chmod, chown, sudo, ls -l, u+x, octal notation (755, 600, 644).
 - **Key Concept:** `rwx` translates to Read (4), Write (2), and Execute (1). Permissions apply to User, Group, and Others.
 - **Errors/Fixes:** Executed script without `+x` privileges to observe the "Permission denied" error and resolved it using `chmod`.
+
+## Day 3 Log - Text Processing, Piping & Redirects
+
+- **Built:** Hands-on log manipulation, text filtering, and command output chaining.
+- **Commands Learned:** cat, grep, head, tail, wc, sort, `|` (pipe), `>` (overwrite), `>>` (append).
+- **Key Concept:** Redirection (`>`) controls where output goes (file vs stdout), while piping (`|`) feeds the stdout of one command directly into the stdin of another.
+- **Errors/Fixes:** Practiced avoiding accidental file overwrites by distinguishing `>` from `>>`.

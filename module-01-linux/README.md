@@ -11,3 +11,9 @@ This directory contains scripts, logs, and documentation for Linux terminal oper
 - Mastered Linux file permission models (`rwx` and octal values: 4-2-1).
 - Applied permission updates using `chmod`.
 - Verified user execution privileges on local shell scripts.
+
+## Day 3: Text Processing & Piping
+- Mastered Linux standard output redirection (`>` and `>>`).
+- Filtered system outputs using `grep`, `head`, and `tail`.
+- Chained terminal commands using pipes (`|`) for stream processing.
+
