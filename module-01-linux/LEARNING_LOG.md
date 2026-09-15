@@ -18,3 +18,10 @@
 - **Commands Learned:** cat, grep, head, tail, wc, sort, `|` (pipe), `>` (overwrite), `>>` (append).
 - **Key Concept:** Redirection (`>`) controls where output goes (file vs stdout), while piping (`|`) feeds the stdout of one command directly into the stdin of another.
 - **Errors/Fixes:** Practiced avoiding accidental file overwrites by distinguishing `>` from `>>`.
+
+## Day 4 Log - Process Management & SSH
+
+- **Built:** Process monitoring, background execution management, and SSH key pair generation.
+- **Commands Learned:** ps, top, kill, jobs, bg, fg, ssh-keygen, cat ~/.ssh/*.pub.
+- **Key Concept:** Private keys must never leave your local system; public keys are installed on remote servers to grant secure access without passwords.
+- **Errors/Fixes:** Practiced terminating background processes cleanly using job control IDs (`kill %1`).

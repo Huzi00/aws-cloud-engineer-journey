@@ -17,3 +17,8 @@ This directory contains scripts, logs, and documentation for Linux terminal oper
 - Filtered system outputs using `grep`, `head`, and `tail`.
 - Chained terminal commands using pipes (`|`) for stream processing.
 
+## Day 4: Process Management & SSH
+- Monitored and managed system processes (`ps`, `jobs`, `kill`).
+- Generated 4096-bit RSA SSH key pairs for secure remote host authentication.
+- Configured secure local key storage inside `~/.ssh/`.
+
