@@ -25,3 +25,10 @@
 - **Commands Learned:** ps, top, kill, jobs, bg, fg, ssh-keygen, cat ~/.ssh/*.pub.
 - **Key Concept:** Private keys must never leave your local system; public keys are installed on remote servers to grant secure access without passwords.
 - **Errors/Fixes:** Practiced terminating background processes cleanly using job control IDs (`kill %1`).
+
+## Day 5 Log - Module 01 Capstone Project
+
+- **Built:** Automated System Health-Check & Log Rotation Script scheduled via Cron.
+- **Commands Learned:** df -h, free -h, find -mtime, exec rm, crontab -e, date formatting.
+- **Key Concept:** Combined variables, stream redirection, file permissions, and automated job scheduling into a production-style admin utility.
+- **Errors/Fixes:** Resolved pathing issues by ensuring relative paths resolve correctly relative to the working directory.
