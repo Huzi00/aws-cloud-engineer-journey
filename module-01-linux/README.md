@@ -43,3 +43,12 @@ To schedule this script on a standard Linux environment (e.g., Ubuntu/EC2), add 
 
 ```cron
 0 * * * * /bin/bash ~/aws-cloud-engineer-journey/module-01-linux/log-automation/healthcheck.sh
+
+# Module 02: Computer Networking & Web Architecture
+
+This directory tracks core networking fundamentals, CIDR subnetting, DNS resolution, and local web server deployments.
+
+## Day 6: OSI & TCP/IP Models
+- Mapped 7-layer OSI model to 4-layer TCP/IP stack.
+- Executed CLI diagnostics (`ping`, `traceroute`, `curl`).
+- Linked network layers to AWS infrastructure primitives.
