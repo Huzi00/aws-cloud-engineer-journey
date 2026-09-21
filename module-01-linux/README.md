@@ -52,3 +52,8 @@ This directory tracks core networking fundamentals, CIDR subnetting, DNS resolut
 - Mapped 7-layer OSI model to 4-layer TCP/IP stack.
 - Executed CLI diagnostics (`ping`, `traceroute`, `curl`).
 - Linked network layers to AWS infrastructure primitives.
+
+## Day 7: IP Addressing, Subnetting & CIDR
+- Analyzed IPv4 octet structures, network masks, and prefix length calculations.
+- Constructed a CIDR reference table mapped to AWS VPC architecture specs.
+- Calculated usable host IP availability accounting for the 5 AWS reserved addresses.
