@@ -29,3 +29,10 @@ In any AWS VPC subnet, **5 IP addresses** are automatically reserved by AWS and 
 For a VPC assigned `10.0.0.0/16`:
 - **Public Subnet 1:** `10.0.1.0/24` (IP Range: `10.0.1.0` - `10.0.1.255` | Usable: 251 IPs)
 - **Private Subnet 1:** `10.0.2.0/24` (IP Range: `10.0.2.0` - `10.0.2.255` | Usable: 251 IPs)
+
+## Day 8 Log - DNS Fundamentals & Name Resolution
+
+- **Built:** DNS record lookup queries and local hosts file inspection.
+- **Commands Learned:** nslookup, dig, cat /c/Windows/System32/drivers/etc/hosts.
+- **Key Concept:** DNS translates human-readable domain names to IP addresses via a hierarchical lookup process (Recursive -> Root -> TLD -> Authoritative). Route 53 Alias records extend standard CNAME behavior for AWS resources.
+- **Errors/Fixes:** Verified difference between standard CNAME records and AWS Route 53 Alias records for zone apex (root domain) mapping.

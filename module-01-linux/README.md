@@ -57,3 +57,8 @@ This directory tracks core networking fundamentals, CIDR subnetting, DNS resolut
 - Analyzed IPv4 octet structures, network masks, and prefix length calculations.
 - Constructed a CIDR reference table mapped to AWS VPC architecture specs.
 - Calculated usable host IP availability accounting for the 5 AWS reserved addresses.
+
+## Day 8: DNS Fundamentals & Name Resolution
+- Queried A, MX, and NS records using CLI lookup tools (`nslookup`, `dig`).
+- Deconstructed recursive resolution flow from Root to Authoritative servers.
+- Documented DNS record types and mapped them to Amazon Route 53 primitives.
