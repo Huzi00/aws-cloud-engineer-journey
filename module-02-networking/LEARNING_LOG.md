@@ -36,3 +36,10 @@ For a VPC assigned `10.0.0.0/16`:
 - **Commands Learned:** nslookup, dig, cat /c/Windows/System32/drivers/etc/hosts.
 - **Key Concept:** DNS translates human-readable domain names to IP addresses via a hierarchical lookup process (Recursive -> Root -> TLD -> Authoritative). Route 53 Alias records extend standard CNAME behavior for AWS resources.
 - **Errors/Fixes:** Verified difference between standard CNAME records and AWS Route 53 Alias records for zone apex (root domain) mapping.
+
+## Day 9 Log - HTTP/HTTPS, Web Architecture & Ports
+
+- **Built:** Header inspection and web protocol analysis using verbose CLI tools.
+- **Commands Learned:** curl -I, curl -vI, curl -X.
+- **Key Concept:** HTTPS secures HTTP traffic by performing a TLS handshake over Port 443 before data exchange. Multi-tier web architectures separate presentation, logic, and database layers into distinct network segments.
+- **Errors/Fixes:** Analyzed HTTP 301 redirects when querying http:// versus https:// endpoints.

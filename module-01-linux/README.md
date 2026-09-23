@@ -62,3 +62,8 @@ This directory tracks core networking fundamentals, CIDR subnetting, DNS resolut
 - Queried A, MX, and NS records using CLI lookup tools (`nslookup`, `dig`).
 - Deconstructed recursive resolution flow from Root to Authoritative servers.
 - Documented DNS record types and mapped them to Amazon Route 53 primitives.
+
+## Day 9: HTTP/HTTPS, Web Architecture & Ports
+- Examined HTTP request/response headers and status codes using `curl`.
+- Mapped standard networking ports (22, 80, 443, 3306, 5432) to AWS infrastructure security rules.
+- Documented 3-tier web architecture components for cloud applications.
