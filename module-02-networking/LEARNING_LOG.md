@@ -43,3 +43,10 @@ For a VPC assigned `10.0.0.0/16`:
 - **Commands Learned:** curl -I, curl -vI, curl -X.
 - **Key Concept:** HTTPS secures HTTP traffic by performing a TLS handshake over Port 443 before data exchange. Multi-tier web architectures separate presentation, logic, and database layers into distinct network segments.
 - **Errors/Fixes:** Analyzed HTTP 301 redirects when querying http:// versus https:// endpoints.
+
+## Day 10 Log - Module 02 Capstone Project
+
+- **Built:** Local Python HTTP web server on Port 8080 and automated network diagnostic suite.
+- **Commands Learned:** python -m http.server, curl -w "%{http_code}", nslookup redirection.
+- **Key Concept:** Validated end-to-end networking mechanics by serving static HTTP content locally and programmatically auditing status codes and DNS resolution.
+- **Errors/Fixes:** Verified background process handling and multi-terminal orchestration when running a local server alongside execution scripts.
