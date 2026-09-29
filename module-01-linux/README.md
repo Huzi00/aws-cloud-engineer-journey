@@ -67,3 +67,29 @@ This directory tracks core networking fundamentals, CIDR subnetting, DNS resolut
 - Examined HTTP request/response headers and status codes using `curl`.
 - Mapped standard networking ports (22, 80, 443, 3306, 5432) to AWS infrastructure security rules.
 - Documented 3-tier web architecture components for cloud applications.
+
+## Day 10:# Capstone Project: Local Web Server & Diagnostic Suite
+
+## Problem Statement
+Deploy a local web server environment and write a programmatic diagnostic script to audit web status codes, local listener availability, and remote DNS resolution.
+
+## Features
+- Serves static HTML content on local port `8080` via Python HTTP module.
+- `net_diag.sh` script queries local server status, resolves `aws.amazon.com` DNS, and audits remote HTTPS response codes.
+- Writes formatted diagnostic logs with timestamps.
+
+## How to Run
+1. Start Web Server in Terminal 1:
+   ```bash
+   python -m http.server 8080
+
+
+
+# Module 03: Virtualization, Containers & Cloud Baselines
+
+This directory tracks virtualization primitives, Docker containerization, image management, and cloud infrastructure baselines.
+
+## Day 11: Virtualization vs. Containerization Basics
+- Deconstructed hypervisor architecture vs container runtime engine mechanics.
+- Mapped bare-metal VMs (EC2) to container workloads (ECS/EKS/Fargate).
+- Audited system architecture and kernel properties via CLI commands.

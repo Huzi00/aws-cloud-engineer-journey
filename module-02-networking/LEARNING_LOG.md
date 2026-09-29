@@ -50,3 +50,4 @@ For a VPC assigned `10.0.0.0/16`:
 - **Commands Learned:** python -m http.server, curl -w "%{http_code}", nslookup redirection.
 - **Key Concept:** Validated end-to-end networking mechanics by serving static HTTP content locally and programmatically auditing status codes and DNS resolution.
 - **Errors/Fixes:** Verified background process handling and multi-terminal orchestration when running a local server alongside execution scripts.
+
