@@ -93,3 +93,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Deconstructed hypervisor architecture vs container runtime engine mechanics.
 - Mapped bare-metal VMs (EC2) to container workloads (ECS/EKS/Fargate).
 - Audited system architecture and kernel properties via CLI commands.
+
+## Day 12: Docker Fundamentals & Architecture
+- Verified Docker Engine daemon and client communication via cloud browser playground.
+- Executed `docker run hello-world` container lifecycle test.
+- Documented Docker architecture layers and mapped local workflows to AWS ECR and ECS.
