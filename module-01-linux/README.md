@@ -98,3 +98,9 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Verified Docker Engine daemon and client communication via cloud browser playground.
 - Executed `docker run hello-world` container lifecycle test.
 - Documented Docker architecture layers and mapped local workflows to AWS ECR and ECS.
+
+## Day 13: Dockerfiles, Custom Images & Port Mapping
+- Authored custom Dockerfile specifying base images, dependencies, working directories, and runtime commands.
+- Built custom container image (`my-web-app:v1`) using `docker build`.
+- Configured host-to-container port mapping (`-p 80:8080`) and verified endpoint responses.
+- Mapped container port forwarding concepts to AWS ALB Target Group routing.
