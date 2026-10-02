@@ -104,3 +104,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Built custom container image (`my-web-app:v1`) using `docker build`.
 - Configured host-to-container port mapping (`-p 80:8080`) and verified endpoint responses.
 - Mapped container port forwarding concepts to AWS ALB Target Group routing.
+
+## Day 14: Docker Volumes & Persistent Storage
+- Configured managed Docker named volumes to separate application execution from persistent data storage.
+- Tested container deletion and data recovery across isolated container instances.
+- Documented volume mechanics and mapped local volume patterns to AWS EBS and AWS EFS storage architectures.

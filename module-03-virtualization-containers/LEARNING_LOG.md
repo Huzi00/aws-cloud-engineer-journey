@@ -18,3 +18,10 @@
 - **Commands Learned:** docker build -t, docker run -d -p, curl http://localhost.
 - **Key Concept:** Dockerfiles build immutable layered images; `-p 80:8080` binds host port 80 to isolated container port 8080.
 - **Errors/Fixes:** Verified background container logs via `docker logs web-container` and confirmed HTTP response via curl.
+
+## Day 14 Log - Docker Volumes & Persistent Data
+
+- **Built:** Created named Docker volumes (`app-data`), attached mounts to container instances (`-v`), and tested lifecycle data retention.
+- **Commands Learned:** docker volume create, docker volume ls, docker volume inspect, docker exec, docker rm -f.
+- **Key Concept:** Containers are stateless by default; named volumes isolate data storage from execution process lifecycles.
+- **Errors/Fixes:** Verified volume persistence by completely destroying the host container and reading data back from a fresh container instance.
