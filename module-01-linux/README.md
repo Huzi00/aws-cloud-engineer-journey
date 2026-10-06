@@ -109,3 +109,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured managed Docker named volumes to separate application execution from persistent data storage.
 - Tested container deletion and data recovery across isolated container instances.
 - Documented volume mechanics and mapped local volume patterns to AWS EBS and AWS EFS storage architectures.
+
+## Day 15: Multi-Container Applications with Docker Compose
+- Authored declarative `docker-compose.yml` to define multi-service architecture (Web + Database).
+- Managed multi-container lifecycles, internal DNS networking, and persistent storage volumes via Compose CLI.
+- Mapped local multi-container manifests to AWS Elastic Container Service (ECS) multi-container task definitions.

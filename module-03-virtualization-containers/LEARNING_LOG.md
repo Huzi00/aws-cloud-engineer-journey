@@ -25,3 +25,10 @@
 - **Commands Learned:** docker volume create, docker volume ls, docker volume inspect, docker exec, docker rm -f.
 - **Key Concept:** Containers are stateless by default; named volumes isolate data storage from execution process lifecycles.
 - **Errors/Fixes:** Verified volume persistence by completely destroying the host container and reading data back from a fresh container instance.
+
+## Day 15 Log - Multi-Container Applications with Docker Compose
+
+- **Built:** Multi-tier Nginx web server and PostgreSQL database stack using a single `docker-compose.yml` declarative manifest.
+- **Commands Learned:** docker compose up -d, docker compose ps, docker compose logs, docker compose down -v.
+- **Key Concept:** Docker Compose manages full multi-container lifecycles, service dependencies, internal DNS service discovery, and network isolation declaratively.
+- **Errors/Fixes:** Verified background stack launch and tested endpoint responsiveness via `curl http://localhost:8080`.
