@@ -114,3 +114,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Authored declarative `docker-compose.yml` to define multi-service architecture (Web + Database).
 - Managed multi-container lifecycles, internal DNS networking, and persistent storage volumes via Compose CLI.
 - Mapped local multi-container manifests to AWS Elastic Container Service (ECS) multi-container task definitions.
+
+# Module 04: Cloud Foundations & AWS Infrastructure Baselines
+
+## Day 16: AWS Global Infrastructure & Regions
+- Mapped AWS global infrastructure components: Regions, Availability Zones (AZs), and Edge Locations.
+- Configured AWS CLI profile defaulted to `af-south-1` (Cape Town).
+- Defined regional selection criteria based on compliance, latency, cost, and service availability.
