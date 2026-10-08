@@ -121,3 +121,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Mapped AWS global infrastructure components: Regions, Availability Zones (AZs), and Edge Locations.
 - Configured AWS CLI profile defaulted to `af-south-1` (Cape Town).
 - Defined regional selection criteria based on compliance, latency, cost, and service availability.
+
+## Day 17: AWS IAM & Security Policy Mechanics
+- Analyzed IAM Users, Groups, Roles, and JSON Policy documents.
+- Authored and validated custom S3 Read-Only IAM policy enforcing Principle of Least Privilege (PoLP).
+- Documented policy evaluation logic rules (Explicit Deny precedence and Implicit Deny default).
