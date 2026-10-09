@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool s3-read-only-policy.json.
 - **Key Concept:** Explicit Deny overrides all Allows; IAM Roles provide temporary STS credentials to eliminate long-lived hardcoded secrets.
 - **Errors/Fixes:** Validated policy structure against `2012-10-17` IAM Policy syntax standards.
+
+## Day 18 Log - AWS VPC Core Networking & Subnet Design
+
+- **Built:** Authored CloudFormation infrastructure template (`vpc-template.json`) defining a custom VPC (`10.0.0.0/16`), public subnet (`10.0.1.0/24`), and Internet Gateway attachment.
+- **Commands Learned:** python -m json.tool vpc-template.json.
+- **Key Concept:** Subnets are bound to a single AZ; AWS reserves 5 IP addresses per subnet; Public subnets require an attached Internet Gateway and explicit route table entry (`0.0.0.0/0`).
+- **Errors/Fixes:** Verified CloudFormation JSON formatting standards and validated CIDR subnet range calculations.

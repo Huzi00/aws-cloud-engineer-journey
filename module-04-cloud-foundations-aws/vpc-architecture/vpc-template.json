@@ -1,0 +1,53 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Production 2-Tier VPC Architecture with Public and Private Subnets in af-south-1",
+    "Resources": {
+      "CustomVPC": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.0.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "CloudEngineer-VPC"
+            }
+          ]
+        }
+      },
+      "PublicSubnetA": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "CustomVPC" },
+          "CidrBlock": "10.0.1.0/24",
+          "AvailabilityZone": "af-south-1a",
+          "MapPublicIpOnLaunch": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "Public-Subnet-1a"
+            }
+          ]
+        }
+      },
+      "InternetGateway": {
+        "Type": "AWS::EC2::InternetGateway",
+        "Properties": {
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "CloudEngineer-IGW"
+            }
+          ]
+        }
+      },
+      "VPCGatewayAttachment": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "VpcId": { "Ref": "CustomVPC" },
+          "InternetGatewayId": { "Ref": "InternetGateway" }
+        }
+      }
+    }
+  }

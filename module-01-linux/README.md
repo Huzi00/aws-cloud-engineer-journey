@@ -126,3 +126,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Analyzed IAM Users, Groups, Roles, and JSON Policy documents.
 - Authored and validated custom S3 Read-Only IAM policy enforcing Principle of Least Privilege (PoLP).
 - Documented policy evaluation logic rules (Explicit Deny precedence and Implicit Deny default).
+
+## Day 18: AWS VPC Networking & Subnet Topology
+- Designed multi-tier VPC architecture incorporating CIDR block allocation (`10.0.0.0/16`).
+- Authored CloudFormation template (`vpc-template.json`) for VPC, Public Subnet, and Internet Gateway resources.
+- Documented AWS subnet IP reservation mechanics and route table evaluation logic.
