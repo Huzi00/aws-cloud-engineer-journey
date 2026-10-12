@@ -131,3 +131,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Designed multi-tier VPC architecture incorporating CIDR block allocation (`10.0.0.0/16`).
 - Authored CloudFormation template (`vpc-template.json`) for VPC, Public Subnet, and Internet Gateway resources.
 - Documented AWS subnet IP reservation mechanics and route table evaluation logic.
+
+## Day 19: Route Tables, Gateways, and Traffic Security
+- Configured public route tables and linked `0.0.0.0/0` traffic to Internet Gateways.
+- Authored CloudFormation resource definitions for custom VPC routing structures and stateful Security Groups.
+- Documented core operational differences between stateful Security Groups and stateless NACLs.

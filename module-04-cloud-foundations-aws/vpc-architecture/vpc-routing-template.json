@@ -1,0 +1,77 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "VPC Route Tables, IGW Routes, and Security Groups",
+    "Resources": {
+      "CustomVPC": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.0.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true
+        }
+      },
+      "PublicSubnetA": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "CustomVPC" },
+          "CidrBlock": "10.0.1.0/24",
+          "AvailabilityZone": "af-south-1a",
+          "MapPublicIpOnLaunch": true
+        }
+      },
+      "InternetGateway": {
+        "Type": "AWS::EC2::InternetGateway"
+      },
+      "VPCGatewayAttachment": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "VpcId": { "Ref": "CustomVPC" },
+          "InternetGatewayId": { "Ref": "InternetGateway" }
+        }
+      },
+      "PublicRouteTable": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": { "Ref": "CustomVPC" },
+          "Tags": [{ "Key": "Name", "Value": "Public-Route-Table" }]
+        }
+      },
+      "PublicRoute": {
+        "Type": "AWS::EC2::Route",
+        "DependsOn": "VPCGatewayAttachment",
+        "Properties": {
+          "RouteTableId": { "Ref": "PublicRouteTable" },
+          "DestinationCidrBlock": "0.0.0.0/0",
+          "GatewayId": { "Ref": "InternetGateway" }
+        }
+      },
+      "PublicSubnetRouteTableAssociation": {
+        "Type": "AWS::EC2::SubnetRouteTableAssociation",
+        "Properties": {
+          "SubnetId": { "Ref": "PublicSubnetA" },
+          "RouteTableId": { "Ref": "PublicRouteTable" }
+        }
+      },
+      "WebServerSecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Enable HTTP and SSH access for web servers",
+          "VpcId": { "Ref": "CustomVPC" },
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 80,
+              "ToPort": 80,
+              "CidrIp": "0.0.0.0/0"
+            },
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "CidrIp": "0.0.0.0/0"
+            }
+          ]
+        }
+      }
+    }
+  }

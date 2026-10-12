@@ -18,3 +18,10 @@
 - **Commands Learned:** python -m json.tool vpc-template.json.
 - **Key Concept:** Subnets are bound to a single AZ; AWS reserves 5 IP addresses per subnet; Public subnets require an attached Internet Gateway and explicit route table entry (`0.0.0.0/0`).
 - **Errors/Fixes:** Verified CloudFormation JSON formatting standards and validated CIDR subnet range calculations.
+
+## Day 19 Log - Route Tables, Gateways & Network Firewalls
+
+- **Built:** Authored expanded CloudFormation template (`vpc-routing-template.json`) including route tables, internet gateway routes, subnet associations, and a stateful web server security group.
+- **Commands Learned:** python -m json.tool vpc-routing-template.json.
+- **Key Concept:** Public subnets require a route to an IGW (`0.0.0.0/0`); Security Groups are stateful instance firewalls, while NACLs are stateless subnet guards.
+- **Errors/Fixes:** Validated proper CloudFormation dependencies (`DependsOn` gateway attachment before route creation).
