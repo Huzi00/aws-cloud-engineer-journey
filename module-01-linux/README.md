@@ -136,3 +136,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured public route tables and linked `0.0.0.0/0` traffic to Internet Gateways.
 - Authored CloudFormation resource definitions for custom VPC routing structures and stateful Security Groups.
 - Documented core operational differences between stateful Security Groups and stateless NACLs.
+
+## Day 20: EC2 Compute Integration with Custom VPCs
+- Mapped Amazon EC2 instance parameters to custom subnets and security groups.
+- Authored Infrastructure-as-Code (IaC) CloudFormation template combining networking primitives with compute workloads.
+- Documented ENI bindings, AMI selection criteria, and public/private compute placement rules.

@@ -25,3 +25,10 @@
 - **Commands Learned:** python -m json.tool vpc-routing-template.json.
 - **Key Concept:** Public subnets require a route to an IGW (`0.0.0.0/0`); Security Groups are stateful instance firewalls, while NACLs are stateless subnet guards.
 - **Errors/Fixes:** Validated proper CloudFormation dependencies (`DependsOn` gateway attachment before route creation).
+
+## Day 20 Log - Launching EC2 Instances inside Custom VPC
+
+- **Built:** Authored comprehensive CloudFormation template (`ec2-vpc-template.json`) provisioning a VPC, public subnet, route tables, internet gateway, security group, and an Amazon EC2 web server instance.
+- **Commands Learned:** python -m json.tool ec2-vpc-template.json.
+- **Key Concept:** EC2 instances require explicit binding to a Subnet ID and Security Group IDs to connect to underlying cloud network topologies.
+- **Errors/Fixes:** Verified proper JSON syntax structures and mapped dependency chains between network gateways and compute resources.
