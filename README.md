@@ -141,3 +141,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Mapped Amazon EC2 instance parameters to custom subnets and security groups.
 - Authored Infrastructure-as-Code (IaC) CloudFormation template combining networking primitives with compute workloads.
 - Documented ENI bindings, AMI selection criteria, and public/private compute placement rules.
+
+# Module 05: Object Storage & S3 Management
+
+## Day 21: S3 Core Architecture & Secure Bucket Provisioning
+- Designed globally unique S3 bucket CloudFormation template.
+- Enforced default AES256 server-side encryption and Block Public Access controls.
+- Documented key-value object storage models and versioning mechanics.
