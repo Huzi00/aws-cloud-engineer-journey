@@ -1,0 +1,74 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Secure S3 Bucket with Explicit Bucket Policy and Lifecycle Transition Rules",
+    "Resources": {
+      "CloudEngineerStorageBucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": "cloud-engineer-lifecycle-sandbox-af-south-1",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": true,
+            "RestrictPublicBuckets": true
+          },
+          "BucketEncryption": {
+            "ServerSideEncryptionConfiguration": [
+              {
+                "ServerSideEncryptionByDefault": {
+                  "SSEAlgorithm": "AES256"
+                }
+              }
+            ]
+          },
+          "VersioningConfiguration": {
+            "Status": "Enabled"
+          },
+          "LifecycleConfiguration": {
+            "Rules": [
+              {
+                "Id": "TransitionToGlacierRule",
+                "Status": "Enabled",
+                "Transitions": [
+                  {
+                    "StorageClass": "STANDARD_IA",
+                    "TransitionInDays": 30
+                  },
+                  {
+                    "StorageClass": "GLACIER",
+                    "TransitionInDays": 90
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "S3BucketPolicy": {
+        "Type": "AWS::S3::BucketPolicy",
+        "Properties": {
+          "Bucket": { "Ref": "CloudEngineerStorageBucket" },
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "EnforceTLSRequestsOnly",
+                "Effect": "Deny",
+                "Principal": "*",
+                "Action": "s3:*",
+                "Resource": [
+                  { "Fn::Sub": "arn:aws:s3:::${CloudEngineerStorageBucket}" },
+                  { "Fn::Sub": "arn:aws:s3:::${CloudEngineerStorageBucket}/*" }
+                ],
+                "Condition": {
+                  "Bool": {
+                    "aws:SecureTransport": "false"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }

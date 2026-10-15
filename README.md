@@ -148,3 +148,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Designed globally unique S3 bucket CloudFormation template.
 - Enforced default AES256 server-side encryption and Block Public Access controls.
 - Documented key-value object storage models and versioning mechanics.
+
+## Day 22: Bucket Policies, Security Conditions, and Lifecycle Automation
+- Authored resource-based S3 Bucket Policies enforcing mandatory TLS (HTTPS) communication.
+- Implemented automated S3 Lifecycle Rules transitioning data to Standard-IA (30 days) and Glacier (90 days).
+- Documented operational differences between IAM identity policies and resource-based bucket policies.
