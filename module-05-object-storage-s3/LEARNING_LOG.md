@@ -18,3 +18,11 @@
 - **Commands Learned:** python -m json.tool s3-website-template.json.
 - **Key Concept:** Static web hosting requires public read object policies and website configuration blocks; CloudFormation Outputs retrieve the generated website URL automatically.
 - **Errors/Fixes:** Verified that public access blocks are selectively relaxed for public-facing website assets while maintaining security best practices elsewhere.
+
+## Day 24 Log - Amazon CloudFront & Edge Content Delivery
+
+- **Built:** Authored CloudFormation template (`cloudfront-s3-template.json`) configuring a global CloudFront CDN distribution pointing to an S3 origin, complete with redirect-to-https rules and caching TTL configurations.
+- **Commands Learned:** python -m json.tool cloudfront-s3-template.json.
+- **Key Concept:** CloudFront leverages global edge locations to cache static assets, lower latency, enforce HTTPS redirection, and reduce direct load on S3 storage origins.
+- **Errors/Fixes:** Verified proper matching between Custom Origin configuration parameters and S3 website endpoint naming conventions.
+

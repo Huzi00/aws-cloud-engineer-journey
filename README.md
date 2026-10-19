@@ -158,3 +158,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured S3 bucket website properties (`IndexDocument`, `ErrorDocument`).
 - Implemented public read bucket policies (`s3:GetObject`) for public-facing assets.
 - Utilized CloudFormation Outputs to retrieve regional S3 website endpoints dynamically.
+
+## Day 24: Amazon CloudFront & Global Content Delivery Networks (CDNs)
+- Integrated CloudFront distributions with S3 website origins via Infrastructure-as-Code.
+- Configured edge caching, TTL parameters, and forced HTTPS viewer policies.
+- Documented global edge location routing and performance optimization principles.
