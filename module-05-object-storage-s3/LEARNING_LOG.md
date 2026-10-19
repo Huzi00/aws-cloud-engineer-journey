@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool s3-secure-lifecycle-template.json.
 - **Key Concept:** Bucket policies act as resource-level guards; lifecycle rules optimize costs by transitioning objects from Standard to Standard-IA and Glacier tiers automatically.
 - **Errors/Fixes:** Validated proper JSON substitution functions (`Fn::Sub`) within bucket policy resource ARNs.
+
+## Day 23 Log - S3 Static Website Hosting
+
+- **Built:** Authored CloudFormation template (`s3-website-template.json`) configuring an S3 bucket for static website hosting with custom index/error documents and public read bucket policies.
+- **Commands Learned:** python -m json.tool s3-website-template.json.
+- **Key Concept:** Static web hosting requires public read object policies and website configuration blocks; CloudFormation Outputs retrieve the generated website URL automatically.
+- **Errors/Fixes:** Verified that public access blocks are selectively relaxed for public-facing website assets while maintaining security best practices elsewhere.

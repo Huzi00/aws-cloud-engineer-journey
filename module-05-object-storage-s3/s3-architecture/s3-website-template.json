@@ -1,0 +1,46 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "S3 Static Website Hosting Infrastructure Blueprint",
+    "Resources": {
+      "WebsiteBucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": "cloud-engineer-static-site-af-south-1",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": false,
+            "BlockPublicPolicy": false,
+            "IgnorePublicAcls": false,
+            "RestrictPublicBuckets": false
+          },
+          "WebsiteConfiguration": {
+            "IndexDocument": "index.html",
+            "ErrorDocument": "error.html"
+          }
+        }
+      },
+      "WebsiteBucketPolicy": {
+        "Type": "AWS::S3::BucketPolicy",
+        "Properties": {
+          "Bucket": { "Ref": "WebsiteBucket" },
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": { "Fn::Sub": "arn:aws:s3:::${WebsiteBucket}/*" }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "WebsiteURL": {
+        "Description": "URL for website hosted on S3",
+        "Value": { "Fn::GetAtt": ["WebsiteBucket", "WebsiteURL"] }
+      }
+    }
+  }

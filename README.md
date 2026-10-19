@@ -153,3 +153,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Authored resource-based S3 Bucket Policies enforcing mandatory TLS (HTTPS) communication.
 - Implemented automated S3 Lifecycle Rules transitioning data to Standard-IA (30 days) and Glacier (90 days).
 - Documented operational differences between IAM identity policies and resource-based bucket policies.
+
+## Day 23: Static Website Hosting on S3
+- Configured S3 bucket website properties (`IndexDocument`, `ErrorDocument`).
+- Implemented public read bucket policies (`s3:GetObject`) for public-facing assets.
+- Utilized CloudFormation Outputs to retrieve regional S3 website endpoints dynamically.
