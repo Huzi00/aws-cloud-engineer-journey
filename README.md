@@ -181,3 +181,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured Auto Scaling Groups spanning multiple availability zones with Min/Max/Desired constraints.
 - Integrated ASG instances directly into Application Load Balancer Target Groups with ELB health checks.
 
+## Day 28: Module 06 Capstone Project — High-Availability Compute Architecture
+- Successfully integrated Application Load Balancers, Target Groups, Launch Templates, and Auto Scaling Groups into a unified CloudFormation stack.
+- Configured automated Apache web server bootstrap scripts via instance user-data.
+- Documented multi-AZ fault tolerance and self-healing elastic architecture patterns.
+
