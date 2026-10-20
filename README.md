@@ -186,3 +186,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured automated Apache web server bootstrap scripts via instance user-data.
 - Documented multi-AZ fault tolerance and self-healing elastic architecture patterns.
 
+# Module 07: Database Architecture & Relational Data Management
+
+## Day 29: Amazon RDS & Database Provisioning
+- Provisioned managed MySQL relational databases via CloudFormation.
+- Configured DB Subnet Groups across multiple Availability Zones.
+- Enforced private network accessibility, storage encryption, and internal VPC security group rules.
+
