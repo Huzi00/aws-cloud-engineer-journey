@@ -175,3 +175,9 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned internet-facing Application Load Balancers via CloudFormation.
 - Configured Target Groups, HTTP listeners, and automated health checks.
 - Documented multi-AZ subnet requirements and Layer 7 traffic distribution principles.
+
+## Day 27: EC2 Launch Templates & Auto Scaling Groups (ASG)
+- Implemented reusable EC2 Launch Templates with automated web server bootstrap user data.
+- Configured Auto Scaling Groups spanning multiple availability zones with Min/Max/Desired constraints.
+- Integrated ASG instances directly into Application Load Balancer Target Groups with ELB health checks.
+
