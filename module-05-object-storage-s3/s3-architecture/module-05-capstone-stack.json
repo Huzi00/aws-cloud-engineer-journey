@@ -1,0 +1,112 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Module 05 Capstone: Secure S3 Static Website with Automated Lifecycle and Global CloudFront CDN",
+  "Resources": {
+    "CapstoneWebsiteBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "cloud-engineer-capstone-site-af-south-1",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        },
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+          "ErrorDocument": "error.html"
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Id": "CapstoneArchivalRule",
+              "Status": "Enabled",
+              "Transitions": [
+                {
+                  "StorageClass": "STANDARD_IA",
+                  "TransitionInDays": 30
+                },
+                {
+                  "StorageClass": "GLACIER",
+                  "TransitionInDays": 90
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "CapstoneBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": { "Ref": "CapstoneWebsiteBucket" },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "PublicReadForWebsiteContent",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": { "Fn::Sub": "arn:aws:s3:::${CapstoneWebsiteBucket}/*" }
+            }
+          ]
+        }
+      }
+    },
+    "CapstoneCDN": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": "Module 05 Capstone Global CDN Distribution",
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "Origins": [
+            {
+              "Id": "CapstoneS3Origin",
+              "DomainName": { "Fn::GetAtt": ["CapstoneWebsiteBucket", "WebsiteURL"] },
+              "CustomOriginConfig": {
+                "HTTPPort": 80,
+                "HTTPSPort": 443,
+                "OriginProtocolPolicy": "http-only"
+              }
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "CapstoneS3Origin",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "AllowedMethods": ["GET", "HEAD"],
+            "CachedMethods": ["GET", "HEAD"],
+            "ForwardedValues": {
+              "QueryString": false,
+              "Cookies": { "Forward": "none" }
+            },
+            "DefaultTTL": 86400
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "S3WebsiteURL": {
+      "Description": "Direct S3 Static Website Hosting Endpoint",
+      "Value": { "Fn::GetAtt": ["CapstoneWebsiteBucket", "WebsiteURL"] }
+    },
+    "CloudFrontDistributionURL": {
+      "Description": "Global CloudFront CDN Domain Endpoint",
+      "Value": { "Fn::GetAtt": ["CapstoneCDN", "DomainName"] }
+    }
+  }
+}

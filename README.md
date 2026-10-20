@@ -163,3 +163,9 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Integrated CloudFront distributions with S3 website origins via Infrastructure-as-Code.
 - Configured edge caching, TTL parameters, and forced HTTPS viewer policies.
 - Documented global edge location routing and performance optimization principles.
+
+## Day 25: Module 05 Capstone Project — Complete Storage & CDN Stack
+- Successfully integrated S3 storage security, encryption, bucket policies, and lifecycle automation with global CloudFront CDN distribution.
+- Authored and validated master CloudFormation capstone deployment template.
+- Documented end-to-end architectural design patterns and operational best practices.
+

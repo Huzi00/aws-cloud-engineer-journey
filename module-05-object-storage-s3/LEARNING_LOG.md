@@ -26,3 +26,9 @@
 - **Key Concept:** CloudFront leverages global edge locations to cache static assets, lower latency, enforce HTTPS redirection, and reduce direct load on S3 storage origins.
 - **Errors/Fixes:** Verified proper matching between Custom Origin configuration parameters and S3 website endpoint naming conventions.
 
+## Day 25 Log - Module 05 Capstone Project
+
+- **Built:** Authored master CloudFormation template (`module-05-capstone-stack.json`) integrating S3 static website hosting, encryption, versioning, lifecycles, and global CloudFront CDN distribution into a single automated stack.
+- **Commands Learned:** python -m json.tool module-05-capstone-stack.json.
+- **Key Concept:** End-to-end cloud architectures combine storage security, cost optimization lifecycles, and edge acceleration to produce performant, production-ready web platforms.
+- **Errors/Fixes:** Verified proper cross-resource referencing using `Fn::GetAtt` to connect CloudFront custom origins directly to the S3 website endpoint.
