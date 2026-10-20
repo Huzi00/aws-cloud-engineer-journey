@@ -169,3 +169,9 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Authored and validated master CloudFormation capstone deployment template.
 - Documented end-to-end architectural design patterns and operational best practices.
 
+# Module 06: Compute, Elastic Load Balancing & Auto Scaling
+
+## Day 26: Application Load Balancers (ALB) & Traffic Routing
+- Provisioned internet-facing Application Load Balancers via CloudFormation.
+- Configured Target Groups, HTTP listeners, and automated health checks.
+- Documented multi-AZ subnet requirements and Layer 7 traffic distribution principles.
