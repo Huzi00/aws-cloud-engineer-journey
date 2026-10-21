@@ -193,3 +193,9 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured DB Subnet Groups across multiple Availability Zones.
 - Enforced private network accessibility, storage encryption, and internal VPC security group rules.
 
+# Module 07: Database Architecture & Relational Data Management
+
+## Day 31: Module 07 Capstone Project — Multi-Tier Stack Integration
+- Successfully integrated public load balancing, auto-scaling compute, and secure RDS database instances into a master CloudFormation stack.
+- Configured encrypted storage, DB subnet groups, and internal VPC database security rules.
+- Documented end-to-end multi-tier architectural design patterns.

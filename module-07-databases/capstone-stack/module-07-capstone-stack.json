@@ -1,0 +1,176 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Module 07 Capstone: Secure Multi-Tier Architecture with Public ALB, Compute ASG, and Private RDS Database",
+    "Parameters": {
+      "VpcId": {
+        "Type": "AWS::EC2::VPC::Id",
+        "Description": "Target VPC ID for the multi-tier stack."
+      },
+      "PublicSubnetOne": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "First public subnet for ALB and public compute instances."
+      },
+      "PublicSubnetTwo": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "Second public subnet for ALB and public compute instances."
+      },
+      "ImageId": {
+        "Type": "String",
+        "Description": "AMI ID for EC2 web instances (e.g., Amazon Linux 2023)."
+      },
+      "DBUser": {
+        "Type": "String",
+        "Description": "Database administrator username.",
+        "Default": "adminuser"
+      },
+      "DBPassword": {
+        "Type": "String",
+        "Description": "Database administrator password.",
+        "NoEcho": true
+      }
+    },
+    "Resources": {
+      "ALBSecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Allow public HTTP traffic to Load Balancer",
+          "VpcId": { "Ref": "VpcId" },
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 80,
+              "ToPort": 80,
+              "CidrIp": "0.0.0.0/0"
+            }
+          ]
+        }
+      },
+      "DBSecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Allow inbound MySQL traffic exclusively from internal VPC range",
+          "VpcId": { "Ref": "VpcId" },
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 3306,
+              "ToPort": 3306,
+              "CidrIp": "10.0.0.0/16"
+            }
+          ]
+        }
+      },
+      "ApplicationLoadBalancer": {
+        "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+        "Properties": {
+          "Name": "cloud-engineer-tier-alb",
+          "Scheme": "internet-facing",
+          "Subnets": [
+            { "Ref": "PublicSubnetOne" },
+            { "Ref": "PublicSubnetTwo" }
+          ],
+          "SecurityGroups": [{ "Ref": "ALBSecurityGroup" }]
+        }
+      },
+      "ALBTargetGroup": {
+        "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+        "Properties": {
+          "Name": "tier-web-tg",
+          "Port": 80,
+          "Protocol": "HTTP",
+          "VpcId": { "Ref": "VpcId" },
+          "HealthCheckProtocol": "HTTP",
+          "HealthCheckPath": "/",
+          "HealthCheckIntervalSeconds": 30
+        }
+      },
+      "ALBListener": {
+        "Type": "AWS::ElasticLoadBalancingV2::Listener",
+        "Properties": {
+          "LoadBalancerArn": { "Ref": "ApplicationLoadBalancer" },
+          "Port": 80,
+          "Protocol": "HTTP",
+          "DefaultActions": [
+            {
+              "Type": "forward",
+              "TargetGroupArn": { "Ref": "ALBTargetGroup" }
+            }
+          ]
+        }
+      },
+      "WebLaunchTemplate": {
+        "Type": "AWS::EC2::LaunchTemplate",
+        "Properties": {
+          "LaunchTemplateName": "tier-web-launch-template",
+          "LaunchTemplateData": {
+            "ImageId": { "Ref": "ImageId" },
+            "InstanceType": "t3.micro",
+            "UserData": {
+              "Fn::Base64": "#!/bin/bash\nyum update -y\nyum install -y httpd\necho '<h1>Multi-Tier Architecture: Compute Tier Connected to RDS</h1>' > /var/www/html/index.html\nsystemctl start httpd\nsystemctl enable httpd"
+            }
+          }
+        }
+      },
+      "WebServerASG": {
+        "Type": "AWS::AutoScaling::AutoScalingGroup",
+        "Properties": {
+          "AutoScalingGroupName": "tier-web-asg",
+          "VPCZoneIdentifier": [
+            { "Ref": "PublicSubnetOne" },
+            { "Ref": "PublicSubnetTwo" }
+          ],
+          "LaunchTemplate": {
+            "LaunchTemplateId": { "Ref": "WebLaunchTemplate" },
+            "Version": { "Fn::GetAtt": ["WebLaunchTemplate", "LatestVersionNumber"] }
+          },
+          "MinSize": "1",
+          "MaxSize": "3",
+          "DesiredCapacity": "2",
+          "TargetGroupARNs": [
+            { "Ref": "ALBTargetGroup" }
+          ],
+          "HealthCheckType": "ELB",
+          "HealthCheckGracePeriod": 300
+        }
+      },
+      "DBSubnetGroup": {
+        "Type": "AWS::RDS::DBSubnetGroup",
+        "Properties": {
+          "DBSubnetGroupDescription": "Subnet group for multi-tier RDS instance",
+          "SubnetIds": [
+            { "Ref": "PublicSubnetOne" },
+            { "Ref": "PublicSubnetTwo" }
+          ]
+        }
+      },
+      "CapstoneRDSInstance": {
+        "Type": "AWS::RDS::DBInstance",
+        "Properties": {
+          "DBInstanceIdentifier": "cloud-engineer-capstone-rds",
+          "Engine": "mysql",
+          "EngineVersion": "8.0",
+          "DBInstanceClass": "db.t3.micro",
+          "AllocatedStorage": "20",
+          "StorageType": "gp2",
+          "MasterUsername": { "Ref": "DBUser" },
+          "MasterUserPassword": { "Ref": "DBPassword" },
+          "DBSubnetGroupName": { "Ref": "DBSubnetGroup" },
+          "VpcSecurityGroupIds": [{ "Ref": "DBSecurityGroup" }],
+          "MultiAZ": false,
+          "StorageEncrypted": true,
+          "PubliclyAccessible": false,
+          "BackupRetentionPeriod": 7
+        }
+      }
+    },
+    "Outputs": {
+      "LoadBalancerDNSName": {
+        "Description": "Public DNS endpoint for the Multi-Tier Web Architecture",
+        "Value": { "Fn::GetAtt": ["ApplicationLoadBalancer", "DNSName"] }
+      },
+      "DatabaseEndpoint": {
+        "Description": "Private connection endpoint for the RDS database",
+        "Value": { "Fn::GetAtt": ["CapstoneRDSInstance", "Endpoint.Address"] }
+      }
+    }
+  }
