@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool sns-alert-template.json.
 - **Key Concept:** Amazon SNS bridges telemetry alerts from CloudWatch to external communication endpoints like email, ensuring engineers are notified immediately when performance thresholds are breached.
 - **Errors/Fixes:** Verified that email subscriptions require explicit confirmation via AWS confirmation links sent to the specified endpoint before notifications are delivered.
+
+## Day 34 Log - Module 08 Capstone Project
+
+- **Built:** Authored master CloudFormation template (`module-08-capstone-stack.json`) integrating centralized CloudWatch log groups, Amazon SNS topics, email subscriptions, and automated CPU alarms into a single observability stack.
+- **Commands Learned:** python -m json.tool module-08-capstone-stack.json.
+- **Key Concept:** End-to-end observability bridges infrastructure metrics and logs with automated pub/sub messaging channels to ensure rapid incident detection and response.
+- **Errors/Fixes:** Verified proper parameter passing between target EC2 instance IDs and CloudWatch alarm metric dimensions.

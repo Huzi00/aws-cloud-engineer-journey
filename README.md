@@ -211,3 +211,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Integrated Amazon SNS topics and email subscriptions with CloudWatch alarms.
 - Configured automated alarm action triggers (`AlarmActions`) for real-time incident notifications.
 - Documented pub/sub messaging patterns and single-pane-of-glass dashboard telemetry.
+
+# Module 08: Monitoring, Logging & Observability
+
+## Day 34: Module 08 Capstone Project — Observability Stack Integration
+- Successfully integrated CloudWatch Log Groups, SNS alerting topics, and CPU alarms into a master CloudFormation stack.
+- Configured automated metric evaluation thresholds and notification action routing.
+- Documented production monitoring and proactive incident management patterns.
