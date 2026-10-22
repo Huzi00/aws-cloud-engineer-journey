@@ -199,3 +199,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Successfully integrated public load balancing, auto-scaling compute, and secure RDS database instances into a master CloudFormation stack.
 - Configured encrypted storage, DB subnet groups, and internal VPC database security rules.
 - Documented end-to-end multi-tier architectural design patterns.
+
+# Module 08: Monitoring, Logging & Observability
+
+## Day 32: Amazon CloudWatch Metrics & Alarms
+- Provisioned centralized CloudWatch Log Groups with automated retention cycles via CloudFormation.
+- Configured CloudWatch Alarms to track EC2 CPU utilization thresholds and evaluation periods.
+- Documented telemetry collection and proactive incident detection strategies.
