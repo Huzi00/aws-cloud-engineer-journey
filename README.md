@@ -206,3 +206,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned centralized CloudWatch Log Groups with automated retention cycles via CloudFormation.
 - Configured CloudWatch Alarms to track EC2 CPU utilization thresholds and evaluation periods.
 - Documented telemetry collection and proactive incident detection strategies.
+
+## Day 33: CloudWatch Dashboards & SNS Alerting
+- Integrated Amazon SNS topics and email subscriptions with CloudWatch alarms.
+- Configured automated alarm action triggers (`AlarmActions`) for real-time incident notifications.
+- Documented pub/sub messaging patterns and single-pane-of-glass dashboard telemetry.
