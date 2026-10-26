@@ -1,0 +1,66 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Secure IAM Execution Role with Least-Privilege S3 Policy",
+    "Parameters": {
+      "TargetBucketName": {
+        "Type": "String",
+        "Description": "Name of the target S3 bucket for restricted read/write access."
+      }
+    },
+    "Resources": {
+      "LeastPrivilegeS3Role": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "cloud-engineer-secure-s3-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [
+                    "ec2.amazonaws.com"
+                  ]
+                },
+                "Action": [
+                  "sts:AssumeRole"
+                ]
+              }
+            ]
+          },
+          "Policies": [
+            {
+              "PolicyName": "S3SpecificBucketAccessPolicy",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "s3:GetObject",
+                      "s3:PutObject",
+                      "s3:ListBucket"
+                    ],
+                    "Resource": [
+                      {
+                        "Fn::Sub": "arn:aws:s3:::${TargetBucketName}"
+                      },
+                      {
+                        "Fn::Sub": "arn:aws:s3:::${TargetBucketName}/*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "CreatedRoleArn": {
+        "Description": "ARN of the secure least-privilege IAM execution role",
+        "Value": { "Fn::GetAtt": ["LeastPrivilegeS3Role", "Arn"] }
+      }
+    }
+  }

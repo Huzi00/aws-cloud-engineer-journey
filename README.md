@@ -218,3 +218,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Successfully integrated CloudWatch Log Groups, SNS alerting topics, and CPU alarms into a master CloudFormation stack.
 - Configured automated metric evaluation thresholds and notification action routing.
 - Documented production monitoring and proactive incident management patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 35: IAM Policies & Least Privilege
+- Authored fine-grained IAM execution roles and trust policies via CloudFormation.
+- Enforced resource-level restrictions on S3 actions (`GetObject`, `PutObject`, `ListBucket`).
+- Documented identity perimeters and blast radius mitigation patterns.
