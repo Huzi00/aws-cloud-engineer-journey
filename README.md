@@ -225,3 +225,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Authored fine-grained IAM execution roles and trust policies via CloudFormation.
 - Enforced resource-level restrictions on S3 actions (`GetObject`, `PutObject`, `ListBucket`).
 - Documented identity perimeters and blast radius mitigation patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 36: IAM Permission Boundaries
+- Implemented IAM permission boundaries via CloudFormation to establish hard governance ceilings.
+- Documented delegated administration patterns and effective permission intersections.
+- Analyzed enterprise security guardrails to mitigate privilege escalation risks.

@@ -1,0 +1,61 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "IAM Role with a Permissions Boundary for Strict Enterprise Governance",
+    "Parameters": {
+      "BoundaryPolicyArn": {
+        "Type": "String",
+        "Description": "ARN of the IAM policy acting as the maximum permissions boundary."
+      }
+    },
+    "Resources": {
+      "BoundedExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "cloud-engineer-bounded-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [
+                    "ec2.amazonaws.com"
+                  ]
+                },
+                "Action": [
+                  "sts:AssumeRole"
+                ]
+              }
+            ]
+          },
+          "PermissionsBoundary": { "Ref": "BoundaryPolicyArn" },
+          "Policies": [
+            {
+              "PolicyName": "AssignedDeveloperPolicy",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "s3:GetObject",
+                      "s3:PutObject",
+                      "s3:ListBucket",
+                      "ec2:DescribeInstances"
+                    ],
+                    "Resource": "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "BoundedRoleArn": {
+        "Description": "ARN of the bounded IAM execution role",
+        "Value": { "Fn::GetAtt": ["BoundedExecutionRole", "Arn"] }
+      }
+    }
+  }
