@@ -232,3 +232,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Implemented IAM permission boundaries via CloudFormation to establish hard governance ceilings.
 - Documented delegated administration patterns and effective permission intersections.
 - Analyzed enterprise security guardrails to mitigate privilege escalation risks.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 37: AWS KMS & Data Encryption
+- Provisioned Customer Managed Keys (CMKs) and aliases via CloudFormation.
+- Configured automated key rotation policies and resource-level key permissions.
+- Documented data-at-rest encryption patterns and cryptographic security standards.

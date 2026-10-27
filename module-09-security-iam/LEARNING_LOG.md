@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool permission-boundary-template.json.
 - **Key Concept:** Permission boundaries establish hard operational ceilings on IAM roles, allowing safe delegation of administrative tasks without risking privilege escalation.
 - **Errors/Fixes:** Verified that role creation requires valid boundary policy ARN parameters to enforce effective access intersections correctly.
+
+## Day 37 Log - AWS Key Management Service (KMS) & Data Encryption Governance
+
+- **Built:** Authored CloudFormation template (`kms-template.json`) provisioning an AWS KMS Customer Managed Key (CMK) with automated annual key rotation and structured key alias mappings.
+- **Commands Learned:** python -m json.tool kms-template.json.
+- **Key Concept:** AWS KMS provides centralized cryptographic key management, allowing engineers to enforce strict encryption standards and automated key rotation across storage and database tiers.
+- **Errors/Fixes:** Verified proper root account principal delegation in key policies to prevent accidental lockout from cryptographic administration.
