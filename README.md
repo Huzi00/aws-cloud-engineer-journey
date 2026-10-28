@@ -239,3 +239,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned Customer Managed Keys (CMKs) and aliases via CloudFormation.
 - Configured automated key rotation policies and resource-level key permissions.
 - Documented data-at-rest encryption patterns and cryptographic security standards.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 38: AWS Secrets Manager
+- Implemented secure credential storage using AWS Secrets Manager via CloudFormation.
+- Integrated KMS custom encryption keys for data-at-rest protection of secret strings.
+- Documented dynamic runtime secret retrieval and rotation governance patterns.

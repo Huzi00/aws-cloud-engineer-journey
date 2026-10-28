@@ -18,3 +18,10 @@
 - **Commands Learned:** python -m json.tool kms-template.json.
 - **Key Concept:** AWS KMS provides centralized cryptographic key management, allowing engineers to enforce strict encryption standards and automated key rotation across storage and database tiers.
 - **Errors/Fixes:** Verified proper root account principal delegation in key policies to prevent accidental lockout from cryptographic administration.
+
+## Day 38 Log - AWS Secrets Manager & Secure Credential Management
+
+- **Built:** Authored CloudFormation template (`secrets-manager-template.json`) provisioning an AWS Secrets Manager secret for structured database credentials encrypted with a custom KMS key.
+- **Commands Learned:** python -m json.tool secrets-manager-template.json.
+- **Key Concept:** AWS Secrets Manager eliminates hardcoded credentials from codebases, providing secure runtime retrieval and automated rotation capabilities for database and API tokens.
+- **Errors/Fixes:** Verified proper JSON string interpolation using `Fn::Sub` to structure key-value credential dictionaries securely.
