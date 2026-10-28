@@ -246,3 +246,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Implemented secure credential storage using AWS Secrets Manager via CloudFormation.
 - Integrated KMS custom encryption keys for data-at-rest protection of secret strings.
 - Documented dynamic runtime secret retrieval and rotation governance patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 39: AWS CloudTrail Auditing
+- Provisioned multi-region CloudTrail auditing trails via CloudFormation.
+- Configured secure S3 log storage buckets with explicit CloudTrail write permissions.
+- Documented cryptographic log file validation and account activity monitoring patterns.

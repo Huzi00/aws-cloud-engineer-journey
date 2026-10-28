@@ -25,3 +25,10 @@
 - **Commands Learned:** python -m json.tool secrets-manager-template.json.
 - **Key Concept:** AWS Secrets Manager eliminates hardcoded credentials from codebases, providing secure runtime retrieval and automated rotation capabilities for database and API tokens.
 - **Errors/Fixes:** Verified proper JSON string interpolation using `Fn::Sub` to structure key-value credential dictionaries securely.
+
+## Day 39 Log - AWS CloudTrail & Account Auditing Compliance
+
+- **Built:** Authored CloudFormation template (`cloudtrail-template.json`) provisioning an encrypted, multi-region AWS CloudTrail trail paired with a locked-down S3 audit log bucket and log file validation.
+- **Commands Learned:** python -m json.tool cloudtrail-template.json.
+- **Key Concept:** AWS CloudTrail provides immutable governance records of all API activities across the AWS account, enabling security teams to conduct root-cause analysis and compliance auditing.
+- **Errors/Fixes:** Verified proper dependency ordering (`DependsOn`) between the S3 bucket policy and the CloudTrail resource to ensure write permissions are active prior to trail creation.
