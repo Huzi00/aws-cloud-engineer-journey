@@ -32,3 +32,10 @@
 - **Commands Learned:** python -m json.tool cloudtrail-template.json.
 - **Key Concept:** AWS CloudTrail provides immutable governance records of all API activities across the AWS account, enabling security teams to conduct root-cause analysis and compliance auditing.
 - **Errors/Fixes:** Verified proper dependency ordering (`DependsOn`) between the S3 bucket policy and the CloudTrail resource to ensure write permissions are active prior to trail creation.
+
+## Day 40 Log - Module 09 Capstone Project
+
+- **Built:** Authored master CloudFormation template (`module-09-capstone-stack.json`) integrating KMS custom keys, IAM permission boundaries, bounded execution roles, Secrets Manager secrets, and multi-region CloudTrail auditing into a single enterprise security stack.
+- **Commands Learned:** python -m json.tool module-09-capstone-stack.json.
+- **Key Concept:** Enterprise cloud security requires a multi-layered defense model combining identity perimeters, cryptographic governance, credential rotation, and immutable audit logging.
+- **Errors/Fixes:** Verified proper dependency mapping between CloudTrail S3 bucket policies and trail resources to guarantee seamless stack deployment.

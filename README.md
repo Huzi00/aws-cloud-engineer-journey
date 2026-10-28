@@ -253,3 +253,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned multi-region CloudTrail auditing trails via CloudFormation.
 - Configured secure S3 log storage buckets with explicit CloudTrail write permissions.
 - Documented cryptographic log file validation and account activity monitoring patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 40: Module 09 Capstone Project — Enterprise Security Stack
+- Successfully integrated KMS keys, permission boundaries, IAM roles, Secrets Manager, and CloudTrail into a master CloudFormation stack.
+- Enforced enterprise-grade least privilege, data-at-rest encryption, and immutable audit logging.
+- Documented comprehensive cloud security governance patterns.
