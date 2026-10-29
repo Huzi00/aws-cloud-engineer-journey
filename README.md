@@ -260,3 +260,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Successfully integrated KMS keys, permission boundaries, IAM roles, Secrets Manager, and CloudTrail into a master CloudFormation stack.
 - Enforced enterprise-grade least privilege, data-at-rest encryption, and immutable audit logging.
 - Documented comprehensive cloud security governance patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 41: VPC Peering & Routing
+- Provisioned multi-VPC topologies and subnets via CloudFormation.
+- Established direct VPC Peering connections with non-overlapping CIDR blocks.
+- Configured bidirectional route table forwarding rules for private inter-VPC traffic.
