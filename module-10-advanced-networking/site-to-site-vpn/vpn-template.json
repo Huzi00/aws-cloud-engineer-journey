@@ -1,0 +1,78 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Advanced Networking: AWS Site-to-Site Hybrid VPN Architecture",
+    "Resources": {
+      "HybridVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.50.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-hybrid-cloud"
+            }
+          ]
+        }
+      },
+      "VirtualPrivateGateway": {
+        "Type": "AWS::EC2::VPNGateway",
+        "Properties": {
+          "Type": "ipsec.1",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vgw-hybrid-gateway"
+            }
+          ]
+        }
+      },
+      "VpcGatewayAttachment": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "VpcId": { "Ref": "HybridVpc" },
+          "VpnGatewayId": { "Ref": "VirtualPrivateGateway" }
+        }
+      },
+      "CustomerGateway": {
+        "Type": "AWS::EC2::CustomerGateway",
+        "Properties": {
+          "BgpAsn": 65000,
+          "IpAddress": "203.0.113.12",
+          "Type": "ipsec.1",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "cgw-on-premise-router"
+            }
+          ]
+        }
+      },
+      "SiteToSiteVpnConnection": {
+        "Type": "AWS::EC2::VPNConnection",
+        "Properties": {
+          "CustomerGatewayId": { "Ref": "CustomerGateway" },
+          "Type": "ipsec.1",
+          "VpnGatewayId": { "Ref": "VirtualPrivateGateway" },
+          "StaticRoutesOnly": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpn-hybrid-tunnel-connection"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "VpnConnectionId": {
+        "Description": "The ID of the provisioned Site-to-Site VPN Connection",
+        "Value": { "Ref": "SiteToSiteVpnConnection" }
+      },
+      "CustomerGatewayId": {
+        "Description": "The ID of the on-premises Customer Gateway",
+        "Value": { "Ref": "CustomerGateway" }
+      }
+    }
+  }

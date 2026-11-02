@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool transit-gateway-template.json.
 - **Key Concept:** AWS Transit Gateway provides a scalable hub-and-spoke architecture that simplifies multi-VPC connectivity and eliminates complex peering meshes.
 - **Errors/Fixes:** Verified that subnet selections for TGW attachments span proper Availability Zones to ensure high availability across spoke networks.
+
+## Day 43 Log - AWS Site-to-Site VPN & Hybrid Cloud Connectivity
+
+- **Built:** Authored CloudFormation template (`vpn-template.json`) provisioning a hybrid VPC, a Virtual Private Gateway (VGW), a Customer Gateway (CGW), and an active Site-to-Site IPsec VPN connection.
+- **Commands Learned:** python -m json.tool vpn-template.json.
+- **Key Concept:** AWS Site-to-Site VPN enables secure, encrypted hybrid connectivity between corporate on-premises data centers and AWS cloud VPCs using redundant IPsec tunnels.
+- **Errors/Fixes:** Verified proper gateway attachment dependencies (`VpcGatewayAttachment`) prior to instantiating VPN connection tunnels.

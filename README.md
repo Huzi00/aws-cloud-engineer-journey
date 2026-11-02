@@ -274,3 +274,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned central AWS Transit Gateway hubs via CloudFormation.
 - Connected multiple spoke VPCs using scalable Transit Gateway attachments.
 - Documented hub-and-spoke network topologies and enterprise routing best practices.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 43: AWS Site-to-Site VPN
+- Provisioned hybrid cloud networking primitives via CloudFormation.
+- Configured Virtual Private Gateways (VGW) and Customer Gateways (CGW).
+- Established redundant IPsec Site-to-Site VPN connection tunnels.
