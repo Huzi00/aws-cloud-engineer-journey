@@ -267,3 +267,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned multi-VPC topologies and subnets via CloudFormation.
 - Established direct VPC Peering connections with non-overlapping CIDR blocks.
 - Configured bidirectional route table forwarding rules for private inter-VPC traffic.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 42: AWS Transit Gateway
+- Provisioned central AWS Transit Gateway hubs via CloudFormation.
+- Connected multiple spoke VPCs using scalable Transit Gateway attachments.
+- Documented hub-and-spoke network topologies and enterprise routing best practices.
