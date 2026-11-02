@@ -18,3 +18,10 @@
 - **Commands Learned:** python -m json.tool vpn-template.json.
 - **Key Concept:** AWS Site-to-Site VPN enables secure, encrypted hybrid connectivity between corporate on-premises data centers and AWS cloud VPCs using redundant IPsec tunnels.
 - **Errors/Fixes:** Verified proper gateway attachment dependencies (`VpcGatewayAttachment`) prior to instantiating VPN connection tunnels.
+
+## Day 44 Log - AWS Direct Connect & Dedicated Hybrid Links
+
+- **Built:** Authored CloudFormation template (`dx-template.json`) provisioning a global Direct Connect Gateway and a Public Virtual Interface with BGP authentication and route filtering prefix rules.
+- **Commands Learned:** python -m json.tool dx-template.json.
+- **Key Concept:** AWS Direct Connect provides dedicated, high-speed, low-latency fiber-optic connections bypassing the public internet for enterprise hybrid workloads.
+- **Errors/Fixes:** Verified proper ASN configuration and VLAN tagging for BGP peering sessions across physical interconnect endpoints.

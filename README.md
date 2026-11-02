@@ -281,3 +281,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned hybrid cloud networking primitives via CloudFormation.
 - Configured Virtual Private Gateways (VGW) and Customer Gateways (CGW).
 - Established redundant IPsec Site-to-Site VPN connection tunnels.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 44: AWS Direct Connect
+- Provisioned global Direct Connect Gateways via CloudFormation.
+- Configured virtual interfaces (VIFs), BGP parameters, and route filtering prefixes.
+- Documented dedicated fiber connectivity and enterprise hybrid architecture patterns.
