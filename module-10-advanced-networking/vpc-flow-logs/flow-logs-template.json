@@ -1,0 +1,100 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Advanced Networking: VPC Flow Logs and Traffic Auditing Architecture",
+    "Resources": {
+      "AuditedVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.60.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-audited-network"
+            }
+          ]
+        }
+      },
+      "FlowLogBucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": { "Fn::Sub": "vpc-flow-logs-bucket-${AWS::AccountId}-af-south-1" },
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": true,
+            "RestrictPublicBuckets": true
+          },
+          "OwnershipControls": {
+            "Rules": [
+              {
+                "ObjectOwnership": "BucketOwnerEnforced"
+              }
+            ]
+          }
+        }
+      },
+      "FlowLogIamRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "vpc-flow-logs-publishing-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "vpc-flow-logs.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "Policies": [
+            {
+              "PolicyName": "FlowLogsPublishingPolicy",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "logs:CreateLogGroup",
+                      "logs:CreateLogStream",
+                      "logs:PutLogEvents",
+                      "logs:DescribeLogGroups",
+                      "logs:DescribeLogStreams",
+                      "s3:PutObject"
+                    ],
+                    "Resource": "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "VpcFlowLog": {
+        "Type": "AWS::EC2::FlowLog",
+        "Properties": {
+          "ResourceId": { "Ref": "AuditedVpc" },
+          "ResourceType": "VPC",
+          "TrafficType": "ALL",
+          "LogDestinationType": "s3",
+          "LogDestination": { "Fn::Sub": "arn:aws:s3:::vpc-flow-logs-bucket-${AWS::AccountId}-af-south-1" },
+          "DeliverLogsPermissionArn": { "Fn::GetAtt": ["FlowLogIamRole", "Arn"] }
+        }
+      }
+    },
+    "Outputs": {
+      "FlowLogId": {
+        "Description": "The ID of the provisioned VPC Flow Log",
+        "Value": { "Ref": "VpcFlowLog" }
+      },
+      "FlowLogBucketName": {
+        "Description": "The name of the S3 bucket storing network traffic logs",
+        "Value": { "Ref": "FlowLogBucket" }
+      }
+    }
+  }

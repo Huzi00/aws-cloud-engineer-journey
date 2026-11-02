@@ -25,3 +25,10 @@
 - **Commands Learned:** python -m json.tool dx-template.json.
 - **Key Concept:** AWS Direct Connect provides dedicated, high-speed, low-latency fiber-optic connections bypassing the public internet for enterprise hybrid workloads.
 - **Errors/Fixes:** Verified proper ASN configuration and VLAN tagging for BGP peering sessions across physical interconnect endpoints.
+
+## Day 45 Log - AWS VPC Flow Logs & Network Traffic Auditing
+
+- **Built:** Authored CloudFormation template (`flow-logs-template.json`) provisioning an audited VPC, a secure S3 log storage bucket, an IAM publishing role, and an `ALL` traffic VPC Flow Log configuration.
+- **Commands Learned:** python -m json.tool flow-logs-template.json.
+- **Key Concept:** AWS VPC Flow Logs capture IP traffic metadata across network interfaces, enabling security teams to audit firewall rules and detect unauthorized connection attempts.
+- **Errors/Fixes:** Verified proper IAM role assumption trusts (`vpc-flow-logs.amazonaws.com`) to ensure seamless log delivery to S3 storage targets.

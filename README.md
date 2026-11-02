@@ -288,3 +288,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned global Direct Connect Gateways via CloudFormation.
 - Configured virtual interfaces (VIFs), BGP parameters, and route filtering prefixes.
 - Documented dedicated fiber connectivity and enterprise hybrid architecture patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 45: VPC Flow Logs
+- Configured VPC Flow Logs via CloudFormation for comprehensive network traffic auditing.
+- Established secure S3 log buckets and IAM publishing execution roles.
+- Documented traffic capture categories (`ACCEPT`/`REJECT`) and security forensic analysis patterns.
