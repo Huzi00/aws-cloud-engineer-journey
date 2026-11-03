@@ -1,0 +1,92 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Containerization: Amazon ECS Cluster and Serverless Fargate Task Definition",
+    "Resources": {
+      "EcsCluster": {
+        "Type": "AWS::ECS::Cluster",
+        "Properties": {
+          "ClusterName": "enterprise-ecs-fargate-cluster",
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      },
+      "EcsTaskExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "ecs-fargate-execution-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "ecs-tasks.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+          ]
+        }
+      },
+      "EcsTaskDefinition": {
+        "Type": "AWS::ECS::TaskDefinition",
+        "Properties": {
+          "Family": "enterprise-web-app-task",
+          "Cpu": "256",
+          "Memory": "512",
+          "NetworkMode": "awsvpc",
+          "RequiresCompatibilities": [
+            "FARGATE"
+          ],
+          "ExecutionRoleArn": { "Fn::GetAtt": ["EcsTaskExecutionRole", "Arn"] },
+          "ContainerDefinitions": [
+            {
+              "Name": "web-application",
+              "Image": "public.ecr.aws/docker/library/nginx:latest",
+              "Cpu": 256,
+              "Memory": 512,
+              "Essential": true,
+              "PortMappings": [
+                {
+                  "ContainerPort": 80,
+                  "Protocol": "tcp"
+                }
+              ],
+              "LogConfiguration": {
+                "LogDriver": "awslogs",
+                "Options": {
+                  "awslogs-group": "/ecs/enterprise-web-app",
+                  "awslogs-region": "af-south-1",
+                  "awslogs-stream-prefix": "web"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "CloudWatchLogsGroup": {
+        "Type": "AWS::Logs::LogGroup",
+        "Properties": {
+          "LogGroupName": "/ecs/enterprise-web-app",
+          "RetentionInDays": 30
+        }
+      }
+    },
+    "Outputs": {
+      "EcsClusterName": {
+        "Description": "The name of the Amazon ECS Fargate cluster",
+        "Value": { "Ref": "EcsCluster" }
+      },
+      "TaskDefinitionArn": {
+        "Description": "The ARN of the provisioned ECS Task Definition",
+        "Value": { "Ref": "EcsTaskDefinition" }
+      }
+    }
+  }

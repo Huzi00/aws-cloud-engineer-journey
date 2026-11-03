@@ -302,3 +302,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Successfully integrated Transit Gateway hubs, spoke VPCs, Site-to-Site VPNs, and Flow Logs into a master CloudFormation stack.
 - Enforced scalable hub-and-spoke routing, encrypted hybrid tunnels, and complete network traffic visibility.
 - Documented comprehensive cloud networking and hybrid architecture patterns.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 47: Amazon ECS & AWS Fargate
+- Provisioned Amazon ECS clusters and serverless Fargate task definitions via CloudFormation.
+- Configured IAM task execution roles and CloudWatch container logging streams.
+- Documented task-level network isolation patterns using `awsvpc` network modes.
