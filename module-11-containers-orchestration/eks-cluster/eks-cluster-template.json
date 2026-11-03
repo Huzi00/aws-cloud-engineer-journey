@@ -1,0 +1,96 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Containerization: Amazon EKS Managed Kubernetes Cluster Control Plane Architecture",
+    "Resources": {
+      "EksClusterRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "enterprise-eks-cluster-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "eks.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+          ]
+        }
+      },
+      "EksClusterVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "192.168.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-eks-cluster-network"
+            }
+          ]
+        }
+      },
+      "EksSubnetA": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "EksClusterVpc" },
+          "CidrBlock": "192.168.1.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-eks-cluster-a"
+            }
+          ]
+        }
+      },
+      "EksSubnetB": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "EksClusterVpc" },
+          "CidrBlock": "192.168.2.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-eks-cluster-b"
+            }
+          ]
+        }
+      },
+      "EksCluster": {
+        "Type": "AWS::EKS::Cluster",
+        "Properties": {
+          "Name": "enterprise-production-eks-cluster",
+          "RoleArn": { "Fn::GetAtt": ["EksClusterRole", "Arn"] },
+          "ResourcesVpcConfig": {
+            "SubnetIds": [
+              { "Ref": "EksSubnetA" },
+              { "Ref": "EksSubnetB" }
+            ]
+          },
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "EksClusterName": {
+        "Description": "The name of the managed Amazon EKS cluster",
+        "Value": { "Ref": "EksCluster" }
+      },
+      "EksClusterEndpoint": {
+        "Description": "The Kubernetes API server endpoint",
+        "Value": { "Fn::GetAtt": ["EksCluster", "Endpoint"] }
+      }
+    }
+  }

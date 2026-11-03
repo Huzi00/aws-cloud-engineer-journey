@@ -309,3 +309,13 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned Amazon ECS clusters and serverless Fargate task definitions via CloudFormation.
 - Configured IAM task execution roles and CloudWatch container logging streams.
 - Documented task-level network isolation patterns using `awsvpc` network modes.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 47: Amazon ECS & AWS Fargate
+- Provisioned ECS clusters and serverless Fargate task definitions.
+
+## Day 48: Amazon EKS (Elastic Kubernetes Service)
+- Provisioned managed Amazon EKS control planes via CloudFormation.
+- Configured EKS IAM service roles and multi-AZ VPC subnets for Kubernetes networking.
+- Documented managed Kubernetes architecture and control plane best practices.
