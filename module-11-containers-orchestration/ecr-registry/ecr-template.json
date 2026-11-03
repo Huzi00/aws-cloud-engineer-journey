@@ -1,0 +1,31 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Containerization: Amazon ECR Private Repository with Immutability and Vulnerability Scanning",
+    "Resources": {
+      "EcrRepository": {
+        "Type": "AWS::ECR::Repository",
+        "Properties": {
+          "RepositoryName": "enterprise-production-web-app",
+          "ImageTagMutability": "IMMUTABLE",
+          "ImageScanningConfiguration": {
+            "ScanOnPush": true
+          },
+          "EncryptionConfiguration": {
+            "EncryptionType": "AES256"
+          },
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "RepositoryUri": {
+        "Description": "The URI of the Amazon ECR repository",
+        "Value": { "Fn::GetAtt": ["EcrRepository", "RepositoryUri"] }
+      }
+    }
+  }

@@ -319,3 +319,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned managed Amazon EKS control planes via CloudFormation.
 - Configured EKS IAM service roles and multi-AZ VPC subnets for Kubernetes networking.
 - Documented managed Kubernetes architecture and control plane best practices.
+
+## Day 49: Amazon ECR (Elastic Container Registry)
+- Provisioned private ECR repositories via CloudFormation.
+- Configured immutable image tags and automated push-time CVE vulnerability scanning.
+- Documented enterprise container image security and storage best practices.

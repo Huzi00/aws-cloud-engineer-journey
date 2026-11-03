@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool eks-cluster-template.json.
 - **Key Concept:** Amazon EKS manages production Kubernetes control planes automatically, enabling scalable microservices orchestration with standard `kubectl` tooling.
 - **Errors/Fixes:** Verified proper subnet allocation across dual Availability Zones to satisfy EKS control plane network requirements.
+
+## Day 49 Log - Amazon ECR & Secure Image Management
+
+- **Built:** Authored CloudFormation template (`ecr-template.json`) provisioning an enterprise Amazon ECR repository featuring immutable image tag policies (`IMMUTABLE`), automated push-time vulnerability scanning, and AES-256 encryption at rest.
+- **Commands Learned:** python -m json.tool ecr-template.json.
+- **Key Concept:** Amazon ECR provides secure, scalable container image storage integrated with automated CVE vulnerability auditing and immutable release tagging.
+- **Errors/Fixes:** Verified proper repository naming conventions and immutability rules to eliminate deployment drift across container pipelines.
