@@ -32,3 +32,10 @@
 - **Commands Learned:** python -m json.tool flow-logs-template.json.
 - **Key Concept:** AWS VPC Flow Logs capture IP traffic metadata across network interfaces, enabling security teams to audit firewall rules and detect unauthorized connection attempts.
 - **Errors/Fixes:** Verified proper IAM role assumption trusts (`vpc-flow-logs.amazonaws.com`) to ensure seamless log delivery to S3 storage targets.
+
+## Day 46 Log - Module 10 Capstone Project
+
+- **Built:** Authored master CloudFormation template (`module-10-capstone-stack.json`) integrating Transit Gateway hubs, multi-tier spoke VPC attachments, Site-to-Site IPsec hybrid VPN connections, and automated VPC Flow Log auditing into a single enterprise network stack.
+- **Commands Learned:** python -m json.tool module-10-capstone-stack.json.
+- **Key Concept:** Enterprise hybrid networking requires scalable hub-and-spoke routing, secure on-premises cryptographic tunnels, and end-to-end traffic observability.
+- **Errors/Fixes:** Verified proper dependency mapping between VGW attachments and VPN tunnels to guarantee seamless hybrid infrastructure deployment.

@@ -295,3 +295,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured VPC Flow Logs via CloudFormation for comprehensive network traffic auditing.
 - Established secure S3 log buckets and IAM publishing execution roles.
 - Documented traffic capture categories (`ACCEPT`/`REJECT`) and security forensic analysis patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 46: Module 10 Capstone Project — Enterprise Hybrid Network Stack
+- Successfully integrated Transit Gateway hubs, spoke VPCs, Site-to-Site VPNs, and Flow Logs into a master CloudFormation stack.
+- Enforced scalable hub-and-spoke routing, encrypted hybrid tunnels, and complete network traffic visibility.
+- Documented comprehensive cloud networking and hybrid architecture patterns.
