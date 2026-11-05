@@ -1,0 +1,63 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Serverless Architecture: AWS Lambda Function and Least-Privilege Execution Role",
+    "Resources": {
+      "LambdaExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "enterprise-lambda-execution-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          ]
+        }
+      },
+      "ServerlessLambdaFunction": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+          "FunctionName": "enterprise-backend-processor",
+          "Runtime": "python3.11",
+          "Handler": "index.handler",
+          "Role": { "Fn::GetAtt": ["LambdaExecutionRole", "Arn"] },
+          "Timeout": 30,
+          "MemorySize": 256,
+          "Environment": {
+            "Variables": {
+              "ENVIRONMENT": "Production",
+              "REGION": "af-south-1"
+            }
+          },
+          "Code": {
+            "ZipFile": "import json\n\ndef handler(event, context):\n    print('Received event: ' + json.dumps(event))\n    return {\n        'statusCode': 200,\n        'body': json.dumps('Hello from Enterprise Serverless Lambda!')\n    }\n"
+          },
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "LambdaFunctionName": {
+        "Description": "The name of the provisioned Lambda function",
+        "Value": { "Ref": "ServerlessLambdaFunction" }
+      },
+      "LambdaFunctionArn": {
+        "Description": "The ARN of the provisioned Lambda function",
+        "Value": { "Fn::GetAtt": ["ServerlessLambdaFunction", "Arn"] }
+      }
+    }
+  }

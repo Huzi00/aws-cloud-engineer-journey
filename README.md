@@ -331,3 +331,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Successfully integrated Amazon ECR, ECS Fargate, and Amazon EKS into a master CloudFormation stack.
 - Enforced secure container storage, serverless orchestration, and managed Kubernetes control planes.
 - Documented comprehensive containerization patterns and microservices architecture blueprints.
+
+# Module 12: Serverless Architecture & Event-Driven Computing
+
+## Day 51: AWS Lambda & Serverless Compute
+- Provisioned AWS Lambda functions and least-privilege IAM execution roles via CloudFormation.
+- Configured Python runtime environments, memory sizing, timeouts, and CloudWatch log integrations.
+- Documented event-driven serverless architecture and operational best practices.
