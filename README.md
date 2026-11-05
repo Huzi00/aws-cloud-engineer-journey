@@ -338,3 +338,13 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned AWS Lambda functions and least-privilege IAM execution roles via CloudFormation.
 - Configured Python runtime environments, memory sizing, timeouts, and CloudWatch log integrations.
 - Documented event-driven serverless architecture and operational best practices.
+
+# Module 12: Serverless Architecture & Event-Driven Computing
+
+## Day 51: AWS Lambda & Serverless Compute
+- Provisioned AWS Lambda functions and IAM execution roles.
+
+## Day 52: Amazon API Gateway & Serverless HTTP Endpoints
+- Provisioned Amazon API Gateway REST APIs via CloudFormation.
+- Configured Lambda proxy integrations (`AWS_PROXY`), resource paths, and production deployment stages.
+- Documented secure API invocation permissions and event payload handling.

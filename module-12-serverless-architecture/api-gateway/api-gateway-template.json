@@ -1,0 +1,109 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Serverless Architecture: Amazon API Gateway REST API with Lambda Proxy Integration",
+    "Resources": {
+      "LambdaExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "api-lambda-execution-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          ]
+        }
+      },
+      "ApiLambdaFunction": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+          "FunctionName": "api-backend-handler",
+          "Runtime": "python3.11",
+          "Handler": "index.handler",
+          "Role": { "Fn::GetAtt": ["LambdaExecutionRole", "Arn"] },
+          "Timeout": 30,
+          "MemorySize": 256,
+          "Code": {
+            "ZipFile": "import json\n\ndef handler(event, context):\n    return {\n        'statusCode': 200,\n        'headers': {'Content-Type': 'application/json'},\n        'body': json.dumps({'message': 'Hello from API Gateway and Lambda Serverless Stack!'})\n    }\n"
+          }
+        }
+      },
+      "ApiRestApi": {
+        "Type": "AWS::ApiGateway::RestApi",
+        "Properties": {
+          "Name": "enterprise-serverless-api",
+          "Description": "REST API backed by AWS Lambda proxy integration",
+          "EndpointConfiguration": {
+            "Types": ["REGIONAL"]
+          }
+        }
+      },
+      "ApiResource": {
+        "Type": "AWS::ApiGateway::Resource",
+        "Properties": {
+          "RestApiId": { "Ref": "ApiRestApi" },
+          "ParentId": { "Fn::GetAtt": ["ApiRestApi", "RootResourceId"] },
+          "PathPart": "process"
+        }
+      },
+      "ApiMethod": {
+        "Type": "AWS::ApiGateway::Method",
+        "Properties": {
+          "RestApiId": { "Ref": "ApiRestApi" },
+          "ResourceId": { "Ref": "ApiResource" },
+          "HttpMethod": "POST",
+          "AuthorizationType": "NONE",
+          "Integration": {
+            "Type": "AWS_PROXY",
+            "IntegrationHttpMethod": "POST",
+            "Uri": {
+              "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiLambdaFunction.Arn}/invocations"
+            }
+          }
+        }
+      },
+      "ApiDeployment": {
+        "Type": "AWS::ApiGateway::Deployment",
+        "DependsOn": ["ApiMethod"],
+        "Properties": {
+          "RestApiId": { "Ref": "ApiRestApi" }
+        }
+      },
+      "ApiStage": {
+        "Type": "AWS::ApiGateway::Stage",
+        "Properties": {
+          "RestApiId": { "Ref": "ApiRestApi" },
+          "DeploymentId": { "Ref": "ApiDeployment" },
+          "StageName": "prod"
+        }
+      },
+      "ApiLambdaPermission": {
+        "Type": "AWS::Lambda::Permission",
+        "Properties": {
+          "Action": "lambda:InvokeFunction",
+          "FunctionName": { "Ref": "ApiLambdaFunction" },
+          "Principal": "apigateway.amazonaws.com",
+          "SourceArn": {
+            "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiRestApi}/*/POST/process"
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "ApiInvokeUrl": {
+        "Description": "The production invoke URL for the serverless REST API",
+        "Value": {
+          "Fn::Sub": "https://${ApiRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/process"
+        }
+      }
+    }
+  }

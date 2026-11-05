@@ -4,3 +4,10 @@
 - **Commands Learned:** python -m json.tool lambda-template.json.
 - **Key Concept:** AWS Lambda executes backend code on demand in response to triggers, eliminating server management overhead while scaling automatically.
 - **Errors/Fixes:** Verified proper inline string formatting for Python handler scripts within CloudFormation JSON parameters.
+
+## Day 52 Log - Amazon API Gateway & Serverless HTTP Endpoints
+
+- **Built:** Authored CloudFormation template (`api-gateway-template.json`) provisioning a Lambda backend function, an Amazon API Gateway REST API with a `/process` POST resource, AWS_PROXY lambda integrations, automated production stage deployments, and explicit execution permissions.
+- **Commands Learned:** python -m json.tool api-gateway-template.json.
+- **Key Concept:** Amazon API Gateway exposes serverless backend functions to the public internet via managed HTTPS endpoints using proxy integrations.
+- **Errors/Fixes:** Verified proper source ARN mapping in Lambda resource policies to ensure secure cross-service invocation between API Gateway and Lambda.
