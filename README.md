@@ -324,3 +324,10 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned private ECR repositories via CloudFormation.
 - Configured immutable image tags and automated push-time CVE vulnerability scanning.
 - Documented enterprise container image security and storage best practices.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 50: Module 11 Capstone Project — Enterprise Microservices Stack
+- Successfully integrated Amazon ECR, ECS Fargate, and Amazon EKS into a master CloudFormation stack.
+- Enforced secure container storage, serverless orchestration, and managed Kubernetes control planes.
+- Documented comprehensive containerization patterns and microservices architecture blueprints.

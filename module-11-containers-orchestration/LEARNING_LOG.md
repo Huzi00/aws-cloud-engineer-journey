@@ -18,3 +18,10 @@
 - **Commands Learned:** python -m json.tool ecr-template.json.
 - **Key Concept:** Amazon ECR provides secure, scalable container image storage integrated with automated CVE vulnerability auditing and immutable release tagging.
 - **Errors/Fixes:** Verified proper repository naming conventions and immutability rules to eliminate deployment drift across container pipelines.
+
+## Day 50 Log - Module 11 Capstone Project
+
+- **Built:** Authored master CloudFormation template (`module-11-capstone-stack.json`) integrating secure ECR image registries, serverless ECS Fargate task definitions, and managed Amazon EKS cluster control planes into a single enterprise microservices architecture.
+- **Commands Learned:** python -m json.tool module-11-capstone-stack.json.
+- **Key Concept:** Enterprise containerization strategies require unified registries, flexible serverless runtimes (ECS Fargate), and robust container orchestration (EKS).
+- **Errors/Fixes:** Verified proper IAM role configurations and multi-AZ subnet dependencies across distinct container control planes.
