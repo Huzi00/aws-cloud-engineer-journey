@@ -1,0 +1,62 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Serverless Architecture: Amazon SNS Pub/Sub Topic and SQS Fan-Out Pattern",
+    "Resources": {
+      "EnterpriseSnsTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": "enterprise-event-topic",
+          "DisplayName": "Enterprise Event Fan-Out Topic"
+        }
+      },
+      "SubscriberQueue": {
+        "Type": "AWS::SQS::Queue",
+        "Properties": {
+          "QueueName": "enterprise-fanout-subscriber-queue"
+        }
+      },
+      "SnsToSqsSubscription": {
+        "Type": "AWS::SNS::Subscription",
+        "Properties": {
+          "TopicArn": { "Ref": "EnterpriseSnsTopic" },
+          "Protocol": "sqs",
+          "Endpoint": { "Fn::GetAtt": ["SubscriberQueue", "Arn"] }
+        }
+      },
+      "SqsQueuePolicy": {
+        "Type": "AWS::SQS::QueuePolicy",
+        "Properties": {
+          "Queues": [{ "Ref": "SubscriberQueue" }],
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "AllowSnsToSendMessages",
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "sns.amazonaws.com"
+                },
+                "Action": "SQS:SendMessage",
+                "Resource": { "Fn::GetAtt": ["SubscriberQueue", "Arn"] },
+                "Condition": {
+                  "ArnEquals": {
+                    "aws:SourceArn": { "Ref": "EnterpriseSnsTopic" }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "SnsTopicArn": {
+        "Description": "The ARN of the enterprise SNS topic",
+        "Value": { "Ref": "EnterpriseSnsTopic" }
+      },
+      "SubscriberQueueUrl": {
+        "Description": "The URL of the fan-out subscriber SQS queue",
+        "Value": { "Ref": "SubscriberQueue" }
+      }
+    }
+  }

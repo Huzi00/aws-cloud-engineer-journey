@@ -25,3 +25,10 @@
 - **Commands Learned:** python -m json.tool sqs-template.json.
 - **Key Concept:** Amazon SQS decouples serverless components, absorbing traffic spikes and isolating failed transactions using Dead Letter Queues.
 - **Errors/Fixes:** Verified proper redrive policy syntax and ARN cross-referencing between primary queues and error DLQs.
+
+## Day 55 Log - Amazon SNS & Pub/Sub Event Fan-Out
+
+- **Built:** Authored CloudFormation template (`sns-template.json`) provisioning an enterprise Amazon SNS topic, a subscriber SQS queue, an SNS-to-SQS pub/sub subscription, and a secure SQS queue policy with source ARN condition checks.
+- **Commands Learned:** python -m json.tool sns-template.json.
+- **Key Concept:** Amazon SNS enables scalable publish/subscribe event broadcasting, powering multi-subscriber fan-out architectures when paired with SQS.
+- **Errors/Fixes:** Verified proper resource policy linkage between SNS topics and SQS queue endpoints to authorize cross-service message delivery.

@@ -358,3 +358,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned enterprise SQS message queues via CloudFormation.
 - Configured Dead Letter Queues (DLQs), automated redrive policies, and message retention parameters.
 - Documented decoupled event-driven microservices architecture.
+
+## Day 55: Amazon SNS (Simple Notification Service)
+- Provisioned enterprise SNS pub/sub topics via CloudFormation.
+- Configured SNS-to-SQS fan-out subscriptions and secure SQS queue resource policies.
+- Documented event-driven pub/sub messaging and enterprise integration patterns.
