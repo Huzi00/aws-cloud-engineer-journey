@@ -11,3 +11,10 @@
 - **Commands Learned:** python -m json.tool api-gateway-template.json.
 - **Key Concept:** Amazon API Gateway exposes serverless backend functions to the public internet via managed HTTPS endpoints using proxy integrations.
 - **Errors/Fixes:** Verified proper source ARN mapping in Lambda resource policies to ensure secure cross-service invocation between API Gateway and Lambda.
+
+## Day 53 Log - Amazon DynamoDB & Serverless NoSQL Database Tables
+
+- **Built:** Authored CloudFormation template (`dynamodb-template.json`) provisioning an enterprise Amazon DynamoDB table using on-demand billing (`PAY_PER_REQUEST`), composite primary keys (`RecordId` and `Timestamp`), and Point-in-Time Recovery (PITR) protection.
+- **Commands Learned:** python -m json.tool dynamodb-template.json.
+- **Key Concept:** Amazon DynamoDB delivers serverless NoSQL persistence with millisecond latency, automatic scaling, and continuous point-in-time backups.
+- **Errors/Fixes:** Verified proper attribute definition types (`S` for String) and primary key schemas to satisfy DynamoDB indexing requirements.

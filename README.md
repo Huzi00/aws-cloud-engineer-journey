@@ -348,3 +348,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned Amazon API Gateway REST APIs via CloudFormation.
 - Configured Lambda proxy integrations (`AWS_PROXY`), resource paths, and production deployment stages.
 - Documented secure API invocation permissions and event payload handling.
+
+## Day 53: Amazon DynamoDB & Serverless NoSQL Databases
+- Provisioned serverless DynamoDB tables via CloudFormation.
+- Configured on-demand billing modes (`PAY_PER_REQUEST`), composite primary keys, and Point-in-Time Recovery.
+- Documented NoSQL table design patterns and enterprise data protection.

@@ -1,0 +1,52 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Serverless Architecture: Amazon DynamoDB Serverless NoSQL Table Architecture",
+  "Resources": {
+    "ServerlessDynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "enterprise-serverless-records",
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "RecordId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "Timestamp",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "RecordId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "Timestamp",
+            "KeyType": "RANGE"
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Production"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "DynamoDBTableName": {
+      "Description": "The name of the provisioned DynamoDB table",
+      "Value": { "Ref": "ServerlessDynamoDBTable" }
+    },
+    "DynamoDBTableArn": {
+      "Description": "The ARN of the provisioned DynamoDB table",
+      "Value": { "Fn::GetAtt": ["ServerlessDynamoDBTable", "Arn"] }
+    }
+  }
+}
