@@ -18,3 +18,10 @@
 - **Commands Learned:** python -m json.tool dynamodb-template.json.
 - **Key Concept:** Amazon DynamoDB delivers serverless NoSQL persistence with millisecond latency, automatic scaling, and continuous point-in-time backups.
 - **Errors/Fixes:** Verified proper attribute definition types (`S` for String) and primary key schemas to satisfy DynamoDB indexing requirements.
+
+## Day 54 Log - Amazon SQS & Decoupled Messaging
+
+- **Built:** Authored CloudFormation template (`sqs-template.json`) provisioning an enterprise Amazon SQS event queue linked to a Dead Letter Queue (DLQ) via automated redrive policies, custom visibility timeouts, and message retention rules.
+- **Commands Learned:** python -m json.tool sqs-template.json.
+- **Key Concept:** Amazon SQS decouples serverless components, absorbing traffic spikes and isolating failed transactions using Dead Letter Queues.
+- **Errors/Fixes:** Verified proper redrive policy syntax and ARN cross-referencing between primary queues and error DLQs.

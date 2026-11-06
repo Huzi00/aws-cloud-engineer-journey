@@ -1,0 +1,41 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Serverless Architecture: Amazon SQS Event Queue with Dead Letter Queue Pattern",
+    "Resources": {
+      "EnterpriseDeadLetterQueue": {
+        "Type": "AWS::SQS::Queue",
+        "Properties": {
+          "QueueName": "enterprise-app-dlq",
+          "MessageRetentionPeriod": 1209600
+        }
+      },
+      "EnterpriseEventQueue": {
+        "Type::AWS::SQS::Queue",
+        "Properties": {
+          "QueueName": "enterprise-event-queue",
+          "VisibilityTimeoutSeconds": 60,
+          "MessageRetentionPeriod": 345600,
+          "RedrivePolicy": {
+            "deadLetterTargetArn": { "Fn::GetAtt": ["EnterpriseDeadLetterQueue", "Arn"] },
+            "maxReceiveCount": 3
+          },
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "QueueUrl": {
+        "Description": "The URL of the enterprise event SQS queue",
+        "Value": { "Ref": "EnterpriseEventQueue" }
+      },
+      "DlqUrl": {
+        "Description": "The URL of the Dead Letter Queue",
+        "Value": { "Ref": "EnterpriseDeadLetterQueue" }
+      }
+    }
+  }

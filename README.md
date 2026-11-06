@@ -353,3 +353,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Provisioned serverless DynamoDB tables via CloudFormation.
 - Configured on-demand billing modes (`PAY_PER_REQUEST`), composite primary keys, and Point-in-Time Recovery.
 - Documented NoSQL table design patterns and enterprise data protection.
+
+## Day 54: Amazon SQS (Simple Queue Service)
+- Provisioned enterprise SQS message queues via CloudFormation.
+- Configured Dead Letter Queues (DLQs), automated redrive policies, and message retention parameters.
+- Documented decoupled event-driven microservices architecture.
