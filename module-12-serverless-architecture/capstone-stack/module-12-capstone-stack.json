@@ -1,0 +1,192 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Module 12 Capstone: End-to-End Serverless Event-Driven Microservices Stack",
+    "Resources": {
+      "CapstoneTable": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "TableName": "enterprise-capstone-records",
+          "BillingMode": "PAY_PER_REQUEST",
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "RecordId",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "RecordId",
+              "KeyType": "HASH"
+            }
+          ],
+          "PointInTimeRecoverySpecification": {
+            "PointInTimeRecoveryEnabled": true
+          }
+        }
+      },
+      "DeadLetterQueue": {
+        "Type": "AWS::SQS::Queue",
+        "Properties": {
+          "QueueName": "enterprise-capstone-dlq",
+          "MessageRetentionPeriod": 1209600
+        }
+      },
+      "EventQueue": {
+        "Type": "AWS::SQS::Queue",
+        "Properties": {
+          "QueueName": "enterprise-capstone-queue",
+          "VisibilityTimeoutSeconds": 60,
+          "RedrivePolicy": {
+            "deadLetterTargetArn": { "Fn::GetAtt": ["DeadLetterQueue", "Arn"] },
+            "maxReceiveCount": 3
+          }
+        }
+      },
+      "EventTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": "enterprise-capstone-topic",
+          "DisplayName": "Capstone Event Fan-Out Topic"
+        }
+      },
+      "LambdaExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "enterprise-capstone-lambda-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "lambda.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          ],
+          "Policies": [
+            {
+              "PolicyName": "DynamoDBAndQueueAccess",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "dynamodb:PutItem",
+                      "dynamodb:GetItem",
+                      "sqs:SendMessage",
+                      "sns:Publish"
+                    ],
+                    "Resource": "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "CapstoneLambdaFunction": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+          "FunctionName": "enterprise-capstone-processor",
+          "Runtime": "python3.11",
+          "Handler": "index.handler",
+          "Role": { "Fn::GetAtt": ["LambdaExecutionRole", "Arn"] },
+          "Timeout": 30,
+          "MemorySize": 256,
+          "Environment": {
+            "Variables": {
+              "TABLE_NAME": { "Ref": "CapstoneTable" },
+              "QUEUE_URL": { "Ref": "EventQueue" },
+              "TOPIC_ARN": { "Ref": "EventTopic" }
+            }
+          },
+          "Code": {
+            "ZipFile": "import json\nimport os\n\ndef handler(event, context):\n    print('Received event: ' + json.dumps(event))\n    return {\n        'statusCode': 200,\n        'headers': {'Content-Type': 'application/json'},\n        'body': json.dumps({'message': 'Success from Module 12 Serverless Capstone Stack!'})\n    }\n"
+          }
+        }
+      },
+      "CapstoneRestApi": {
+        "Type": "AWS::ApiGateway::RestApi",
+        "Properties": {
+          "Name": "enterprise-capstone-api",
+          "Description": "Serverless REST API for Capstone Backend"
+        }
+      },
+      "ApiResource": {
+        "Type": "AWS::ApiGateway::Resource",
+        "Properties": {
+          "RestApiId": { "Ref": "CapstoneRestApi" },
+          "ParentId": { "Fn::GetAtt": ["CapstoneRestApi", "RootResourceId"] },
+          "PathPart": "submit"
+        }
+      },
+      "ApiMethod": {
+        "Type": "AWS::ApiGateway::Method",
+        "Properties": {
+          "RestApiId": { "Ref": "CapstoneRestApi" },
+          "ResourceId": { "Ref": "ApiResource" },
+          "HttpMethod": "POST",
+          "AuthorizationType": "NONE",
+          "Integration": {
+            "Type": "AWS_PROXY",
+            "IntegrationHttpMethod": "POST",
+            "Uri": {
+              "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CapstoneLambdaFunction.Arn}/invocations"
+            }
+          }
+        }
+      },
+      "ApiDeployment": {
+        "Type": "AWS::ApiGateway::Deployment",
+        "DependsOn": ["ApiMethod"],
+        "Properties": {
+          "RestApiId": { "Ref": "CapstoneRestApi" }
+        }
+      },
+      "ApiStage": {
+        "Type": "AWS::ApiGateway::Stage",
+        "Properties": {
+          "RestApiId": { "Ref": "CapstoneRestApi" },
+          "DeploymentId": { "Ref": "ApiDeployment" },
+          "StageName": "prod"
+        }
+      },
+      "ApiLambdaPermission": {
+        "Type": "AWS::Lambda::Permission",
+        "Properties": {
+          "Action": "lambda:InvokeFunction",
+          "FunctionName": { "Ref": "CapstoneLambdaFunction" },
+          "Principal": "apigateway.amazonaws.com",
+          "SourceArn": {
+            "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${CapstoneRestApi}/*/POST/submit"
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "ApiInvokeUrl": {
+        "Description": "The production invoke URL for the serverless capstone API",
+        "Value": {
+          "Fn::Sub": "https://${CapstoneRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/submit"
+        }
+      },
+      "DynamoDBTableName": {
+        "Description": "The name of the capstone DynamoDB table",
+        "Value": { "Ref": "CapstoneTable" }
+      },
+      "EventQueueUrl": {
+        "Description": "The URL of the capstone SQS queue",
+        "Value": { "Ref": "EventQueue" }
+      },
+      "SNSArn": {
+        "Description": "The ARN of the capstone SNS topic",
+        "Value": { "Ref": "EventTopic" }
+      }
+    }
+  }

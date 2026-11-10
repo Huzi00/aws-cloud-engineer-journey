@@ -1,0 +1,47 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Serverless Architecture: AWS Step Functions Workflow Orchestration State Machine",
+    "Resources": {
+      "StepFunctionExecutionRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "RoleName": "enterprise-step-functions-execution-role",
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "states.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaRole"
+          ]
+        }
+      },
+      "EnterpriseStateMachine": {
+        "Type": "AWS::StepFunctions::StateMachine",
+        "Properties": {
+          "StateMachineName": "enterprise-order-workflow",
+          "RoleArn": { "Fn::GetAtt": ["StepFunctionExecutionRole", "Arn"] },
+          "DefinitionString": "{\n  \"Comment\": \"A simple enterprise workflow using Amazon States Language\",\n  \"StartAt\": \"InitialState\",\n  \"States\": {\n    \"InitialState\": {\n      \"Type\": \"Pass\",\n      \"Result\": \"Workflow initialized successfully\",\n      \"ResultPath\": \"$.result\",\n      \"End\": true\n    }\n  }\n}",
+          "Tags": [
+            {
+              "Key": "Environment",
+              "Value": "Production"
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "StateMachineArn": {
+        "Description": "The ARN of the provisioned Step Functions state machine",
+        "Value": { "Ref": "EnterpriseStateMachine" }
+      }
+    }
+  }

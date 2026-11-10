@@ -1,0 +1,209 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Module 10 Capstone: End-to-End Enterprise Hybrid Networking and Routing Stack",
+    "Resources": {
+      "EnterpriseTransitGateway": {
+        "Type": "AWS::EC2::TransitGateway",
+        "Properties": {
+          "Description": "Central enterprise hub Transit Gateway",
+          "AmazonSideAsn": 64512,
+          "AutoAcceptSharedAttachments": "enable",
+          "DefaultRouteTableAssociation": "enable",
+          "DefaultRouteTablePropagation": "enable",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "enterprise-capstone-tgw-hub"
+            }
+          ]
+        }
+      },
+      "AppVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.10.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-enterprise-app"
+            }
+          ]
+        }
+      },
+      "DataVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.20.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-enterprise-data"
+            }
+          ]
+        }
+      },
+      "AppSubnet": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "AppVpc" },
+          "CidrBlock": "10.10.1.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-app-private"
+            }
+          ]
+        }
+      },
+      "DataSubnet": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "DataVpc" },
+          "CidrBlock": "10.20.1.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-data-private"
+            }
+          ]
+        }
+      },
+      "AppTgwAttachment": {
+        "Type": "AWS::EC2::TransitGatewayAttachment",
+        "Properties": {
+          "TransitGatewayId": { "Ref": "EnterpriseTransitGateway" },
+          "VpcId": { "Ref": "AppVpc" },
+          "SubnetIds": [ { "Ref": "AppSubnet" } ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "tgw-attachment-app-vpc"
+            }
+          ]
+        }
+      },
+      "DataTgwAttachment": {
+        "Type": "AWS::EC2::TransitGatewayAttachment",
+        "Properties": {
+          "TransitGatewayId": { "Ref": "EnterpriseTransitGateway" },
+          "VpcId": { "Ref": "DataVpc" },
+          "SubnetIds": [ { "Ref": "DataSubnet" } ],
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "tgw-attachment-data-vpc"
+            }
+          ]
+        }
+      },
+      "HybridVpnVpc": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.50.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-hybrid-gateway"
+            }
+          ]
+        }
+      },
+      "VirtualPrivateGateway": {
+        "Type": "AWS::EC2::VPNGateway",
+        "Properties": {
+          "Type": "ipsec.1",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vgw-enterprise-hybrid"
+            }
+          ]
+        }
+      },
+      "VpcGatewayAttachment": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "VpcId": { "Ref": "HybridVpnVpc" },
+          "VpnGatewayId": { "Ref": "VirtualPrivateGateway" }
+        }
+      },
+      "CustomerGateway": {
+        "Type": "AWS::EC2::CustomerGateway",
+        "Properties": {
+          "BgpAsn": 65000,
+          "IpAddress": "203.0.113.50",
+          "Type": "ipsec.1",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "cgw-corporate-datacenter"
+            }
+          ]
+        }
+      },
+      "SiteToSiteVpnConnection": {
+        "Type": "AWS::EC2::VPNConnection",
+        "Properties": {
+          "CustomerGatewayId": { "Ref": "CustomerGateway" },
+          "Type": "ipsec.1",
+          "VpnGatewayId": { "Ref": "VirtualPrivateGateway" },
+          "StaticRoutesOnly": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpn-corporate-to-cloud"
+            }
+          ]
+        }
+      },
+      "FlowLogBucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": { "Fn::Sub": "enterprise-network-flow-logs-${AWS::AccountId}-af-south-1" },
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "BlockPublicPolicy": true,
+            "IgnorePublicAcls": true,
+            "RestrictPublicBuckets": true
+          },
+          "OwnershipControls": {
+            "Rules": [
+              {
+                "ObjectOwnership": "BucketOwnerEnforced"
+              }
+            ]
+          }
+        }
+      },
+      "AppVpcFlowLog": {
+        "Type": "AWS::EC2::FlowLog",
+        "Properties": {
+          "ResourceId": { "Ref": "AppVpc" },
+          "ResourceType": "VPC",
+          "TrafficType": "ALL",
+          "LogDestinationType": "s3",
+          "LogDestination": { "Fn::Sub": "arn:aws:s3:::enterprise-network-flow-logs-${AWS::AccountId}-af-south-1" }
+        }
+      }
+    },
+    "Outputs": {
+      "TransitGatewayId": {
+        "Description": "Enterprise Transit Gateway Hub ID",
+        "Value": { "Ref": "EnterpriseTransitGateway" }
+      },
+      "VpnConnectionId": {
+        "Description": "Hybrid Site-to-Site VPN Connection ID",
+        "Value": { "Ref": "SiteToSiteVpnConnection" }
+      },
+      "FlowLogBucketName": {
+        "Description": "Network Flow Logs S3 Bucket Name",
+        "Value": { "Ref": "FlowLogBucket" }
+      }
+    }
+  }

@@ -1,0 +1,80 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Production Application Load Balancer with Target Groups and HTTP Listener",
+    "Parameters": {
+      "VpcId": {
+        "Type": "AWS::EC2::VPC::Id",
+        "Description": "Select the target VPC ID for the load balancer."
+      },
+      "SubnetOne": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "First public subnet for ALB placement."
+      },
+      "SubnetTwo": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "Second public subnet for ALB placement."
+      }
+    },
+    "Resources": {
+      "ALBSecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Allow public HTTP traffic to Load Balancer",
+          "VpcId": { "Ref": "VpcId" },
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 80,
+              "ToPort": 80,
+              "CidrIp": "0.0.0.0/0"
+            }
+          ]
+        }
+      },
+      "ApplicationLoadBalancer": {
+        "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+        "Properties": {
+          "Name": "cloud-engineer-prod-alb",
+          "Scheme": "internet-facing",
+          "Subnets": [
+            { "Ref": "SubnetOne" },
+            { "Ref": "SubnetTwo" }
+          ],
+          "SecurityGroups": [{ "Ref": "ALBSecurityGroup" }]
+        }
+      },
+      "ALBTargetGroup": {
+        "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+        "Properties": {
+          "Name": "web-servers-tg",
+          "Port": 80,
+          "Protocol": "HTTP",
+          "VpcId": { "Ref": "VpcId" },
+          "HealthCheckProtocol": "HTTP",
+          "HealthCheckPath": "/",
+          "HealthCheckIntervalSeconds": 30
+        }
+      },
+      "ALBListener": {
+        "Type": "AWS::ElasticLoadBalancingV2::Listener",
+        "Properties": {
+          "LoadBalancerArn": { "Ref": "ApplicationLoadBalancer" },
+          "Port": 80,
+          "Protocol": "HTTP",
+          "DefaultActions": [
+            {
+              "Type": "forward",
+              "TargetGroupArn": { "Ref": "ALBTargetGroup" }
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "LoadBalancerDNS": {
+        "Description": "Public DNS Name of the Application Load Balancer",
+        "Value": { "Fn::GetAtt": ["ApplicationLoadBalancer", "DNSName"] }
+      }
+    }
+  }
+  

@@ -1,0 +1,49 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Production CloudWatch Observability Stack with Log Groups and CPU Alarms",
+    "Parameters": {
+      "InstanceId": {
+        "Type": "String",
+        "Description": "Target EC2 Instance ID to monitor with CloudWatch Alarms."
+      }
+    },
+    "Resources": {
+      "ApplicationLogGroup": {
+        "Type": "AWS::Logs::LogGroup",
+        "Properties": {
+          "LogGroupName": "/aws/ec2/cloud-engineer-prod-logs",
+          "RetentionInDays": 30
+        }
+      },
+      "HighCPUAlarm": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmName": "cloud-engineer-high-cpu-alarm",
+          "AlarmDescription": "Triggered when instance CPU exceeds 85% for 2 consecutive evaluation periods",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": 300,
+          "EvaluationPeriods": 2,
+          "Threshold": 85.0,
+          "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "InstanceId" }
+            }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "LogGroupNameOutput": {
+        "Description": "Name of the central CloudWatch Log Group",
+        "Value": { "Ref": "ApplicationLogGroup" }
+      },
+      "AlarmNameOutput": {
+        "Description": "Name of the configured High CPU CloudWatch Alarm",
+        "Value": { "Ref": "HighCPUAlarm" }
+      }
+    }
+  }

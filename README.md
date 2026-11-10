@@ -1,0 +1,399 @@
+# Module 01: Terminal Mastery & Linux Administration
+
+This directory contains scripts, logs, and documentation for Linux terminal operations and automation.
+
+## Day 1: Filesystem & Navigation
+- Mastered basic terminal navigation and directory management.
+- Practiced file manipulation using `touch`, `cp`, `mv`, and `rm`.
+- Established proper directory hierarchy for project tracking.
+
+## Day 2: File Permissions & Users
+- Mastered Linux file permission models (`rwx` and octal values: 4-2-1).
+- Applied permission updates using `chmod`.
+- Verified user execution privileges on local shell scripts.
+
+## Day 3: Text Processing & Piping
+- Mastered Linux standard output redirection (`>` and `>>`).
+- Filtered system outputs using `grep`, `head`, and `tail`.
+- Chained terminal commands using pipes (`|`) for stream processing.
+
+## Day 4: Process Management & SSH
+- Monitored and managed system processes (`ps`, `jobs`, `kill`).
+- Generated 4096-bit RSA SSH key pairs for secure remote host authentication.
+- Configured secure local key storage inside `~/.ssh/`.
+
+## Day 5 Capstone Project: Automated Log Rotation & Health-Check Script
+
+## Problem Statement
+Automate system performance tracking (disk/memory) and prune stale log files to prevent storage exhaustion.
+
+## Features
+- Captures system timestamps, `df -h` disk metrics, and `free -h` memory usage.
+- Deletes log files older than 7 days using `find`.
+- Configured via `crontab` to run hourly.
+
+## Execution
+```bash
+chmod +x healthcheck.sh
+./healthcheck.sh
+
+## Automation & Cron Scheduling
+
+To schedule this script on a standard Linux environment (e.g., Ubuntu/EC2), add the following entry using `crontab -e`:
+
+```cron
+0 * * * * /bin/bash ~/aws-cloud-engineer-journey/module-01-linux/log-automation/healthcheck.sh
+
+# Module 02: Computer Networking & Web Architecture
+
+This directory tracks core networking fundamentals, CIDR subnetting, DNS resolution, and local web server deployments.
+
+## Day 6: OSI & TCP/IP Models
+- Mapped 7-layer OSI model to 4-layer TCP/IP stack.
+- Executed CLI diagnostics (`ping`, `traceroute`, `curl`).
+- Linked network layers to AWS infrastructure primitives.
+
+## Day 7: IP Addressing, Subnetting & CIDR
+- Analyzed IPv4 octet structures, network masks, and prefix length calculations.
+- Constructed a CIDR reference table mapped to AWS VPC architecture specs.
+- Calculated usable host IP availability accounting for the 5 AWS reserved addresses.
+
+## Day 8: DNS Fundamentals & Name Resolution
+- Queried A, MX, and NS records using CLI lookup tools (`nslookup`, `dig`).
+- Deconstructed recursive resolution flow from Root to Authoritative servers.
+- Documented DNS record types and mapped them to Amazon Route 53 primitives.
+
+## Day 9: HTTP/HTTPS, Web Architecture & Ports
+- Examined HTTP request/response headers and status codes using `curl`.
+- Mapped standard networking ports (22, 80, 443, 3306, 5432) to AWS infrastructure security rules.
+- Documented 3-tier web architecture components for cloud applications.
+
+## Day 10:# Capstone Project: Local Web Server & Diagnostic Suite
+
+## Problem Statement
+Deploy a local web server environment and write a programmatic diagnostic script to audit web status codes, local listener availability, and remote DNS resolution.
+
+## Features
+- Serves static HTML content on local port `8080` via Python HTTP module.
+- `net_diag.sh` script queries local server status, resolves `aws.amazon.com` DNS, and audits remote HTTPS response codes.
+- Writes formatted diagnostic logs with timestamps.
+
+## How to Run
+1. Start Web Server in Terminal 1:
+   ```bash
+   python -m http.server 8080
+
+
+
+# Module 03: Virtualization, Containers & Cloud Baselines
+
+This directory tracks virtualization primitives, Docker containerization, image management, and cloud infrastructure baselines.
+
+## Day 11: Virtualization vs. Containerization Basics
+- Deconstructed hypervisor architecture vs container runtime engine mechanics.
+- Mapped bare-metal VMs (EC2) to container workloads (ECS/EKS/Fargate).
+- Audited system architecture and kernel properties via CLI commands.
+
+## Day 12: Docker Fundamentals & Architecture
+- Verified Docker Engine daemon and client communication via cloud browser playground.
+- Executed `docker run hello-world` container lifecycle test.
+- Documented Docker architecture layers and mapped local workflows to AWS ECR and ECS.
+
+## Day 13: Dockerfiles, Custom Images & Port Mapping
+- Authored custom Dockerfile specifying base images, dependencies, working directories, and runtime commands.
+- Built custom container image (`my-web-app:v1`) using `docker build`.
+- Configured host-to-container port mapping (`-p 80:8080`) and verified endpoint responses.
+- Mapped container port forwarding concepts to AWS ALB Target Group routing.
+
+## Day 14: Docker Volumes & Persistent Storage
+- Configured managed Docker named volumes to separate application execution from persistent data storage.
+- Tested container deletion and data recovery across isolated container instances.
+- Documented volume mechanics and mapped local volume patterns to AWS EBS and AWS EFS storage architectures.
+
+## Day 15: Multi-Container Applications with Docker Compose
+- Authored declarative `docker-compose.yml` to define multi-service architecture (Web + Database).
+- Managed multi-container lifecycles, internal DNS networking, and persistent storage volumes via Compose CLI.
+- Mapped local multi-container manifests to AWS Elastic Container Service (ECS) multi-container task definitions.
+
+# Module 04: Cloud Foundations & AWS Infrastructure Baselines
+
+## Day 16: AWS Global Infrastructure & Regions
+- Mapped AWS global infrastructure components: Regions, Availability Zones (AZs), and Edge Locations.
+- Configured AWS CLI profile defaulted to `af-south-1` (Cape Town).
+- Defined regional selection criteria based on compliance, latency, cost, and service availability.
+
+## Day 17: AWS IAM & Security Policy Mechanics
+- Analyzed IAM Users, Groups, Roles, and JSON Policy documents.
+- Authored and validated custom S3 Read-Only IAM policy enforcing Principle of Least Privilege (PoLP).
+- Documented policy evaluation logic rules (Explicit Deny precedence and Implicit Deny default).
+
+## Day 18: AWS VPC Networking & Subnet Topology
+- Designed multi-tier VPC architecture incorporating CIDR block allocation (`10.0.0.0/16`).
+- Authored CloudFormation template (`vpc-template.json`) for VPC, Public Subnet, and Internet Gateway resources.
+- Documented AWS subnet IP reservation mechanics and route table evaluation logic.
+
+## Day 19: Route Tables, Gateways, and Traffic Security
+- Configured public route tables and linked `0.0.0.0/0` traffic to Internet Gateways.
+- Authored CloudFormation resource definitions for custom VPC routing structures and stateful Security Groups.
+- Documented core operational differences between stateful Security Groups and stateless NACLs.
+
+## Day 20: EC2 Compute Integration with Custom VPCs
+- Mapped Amazon EC2 instance parameters to custom subnets and security groups.
+- Authored Infrastructure-as-Code (IaC) CloudFormation template combining networking primitives with compute workloads.
+- Documented ENI bindings, AMI selection criteria, and public/private compute placement rules.
+
+# Module 05: Object Storage & S3 Management
+
+## Day 21: S3 Core Architecture & Secure Bucket Provisioning
+- Designed globally unique S3 bucket CloudFormation template.
+- Enforced default AES256 server-side encryption and Block Public Access controls.
+- Documented key-value object storage models and versioning mechanics.
+
+## Day 22: Bucket Policies, Security Conditions, and Lifecycle Automation
+- Authored resource-based S3 Bucket Policies enforcing mandatory TLS (HTTPS) communication.
+- Implemented automated S3 Lifecycle Rules transitioning data to Standard-IA (30 days) and Glacier (90 days).
+- Documented operational differences between IAM identity policies and resource-based bucket policies.
+
+## Day 23: Static Website Hosting on S3
+- Configured S3 bucket website properties (`IndexDocument`, `ErrorDocument`).
+- Implemented public read bucket policies (`s3:GetObject`) for public-facing assets.
+- Utilized CloudFormation Outputs to retrieve regional S3 website endpoints dynamically.
+
+## Day 24: Amazon CloudFront & Global Content Delivery Networks (CDNs)
+- Integrated CloudFront distributions with S3 website origins via Infrastructure-as-Code.
+- Configured edge caching, TTL parameters, and forced HTTPS viewer policies.
+- Documented global edge location routing and performance optimization principles.
+
+## Day 25: Module 05 Capstone Project — Complete Storage & CDN Stack
+- Successfully integrated S3 storage security, encryption, bucket policies, and lifecycle automation with global CloudFront CDN distribution.
+- Authored and validated master CloudFormation capstone deployment template.
+- Documented end-to-end architectural design patterns and operational best practices.
+
+# Module 06: Compute, Elastic Load Balancing & Auto Scaling
+
+## Day 26: Application Load Balancers (ALB) & Traffic Routing
+- Provisioned internet-facing Application Load Balancers via CloudFormation.
+- Configured Target Groups, HTTP listeners, and automated health checks.
+- Documented multi-AZ subnet requirements and Layer 7 traffic distribution principles.
+
+## Day 27: EC2 Launch Templates & Auto Scaling Groups (ASG)
+- Implemented reusable EC2 Launch Templates with automated web server bootstrap user data.
+- Configured Auto Scaling Groups spanning multiple availability zones with Min/Max/Desired constraints.
+- Integrated ASG instances directly into Application Load Balancer Target Groups with ELB health checks.
+
+## Day 28: Module 06 Capstone Project — High-Availability Compute Architecture
+- Successfully integrated Application Load Balancers, Target Groups, Launch Templates, and Auto Scaling Groups into a unified CloudFormation stack.
+- Configured automated Apache web server bootstrap scripts via instance user-data.
+- Documented multi-AZ fault tolerance and self-healing elastic architecture patterns.
+
+# Module 07: Database Architecture & Relational Data Management
+
+## Day 29: Amazon RDS & Database Provisioning
+- Provisioned managed MySQL relational databases via CloudFormation.
+- Configured DB Subnet Groups across multiple Availability Zones.
+- Enforced private network accessibility, storage encryption, and internal VPC security group rules.
+
+# Module 07: Database Architecture & Relational Data Management
+
+## Day 31: Module 07 Capstone Project — Multi-Tier Stack Integration
+- Successfully integrated public load balancing, auto-scaling compute, and secure RDS database instances into a master CloudFormation stack.
+- Configured encrypted storage, DB subnet groups, and internal VPC database security rules.
+- Documented end-to-end multi-tier architectural design patterns.
+
+# Module 08: Monitoring, Logging & Observability
+
+## Day 32: Amazon CloudWatch Metrics & Alarms
+- Provisioned centralized CloudWatch Log Groups with automated retention cycles via CloudFormation.
+- Configured CloudWatch Alarms to track EC2 CPU utilization thresholds and evaluation periods.
+- Documented telemetry collection and proactive incident detection strategies.
+
+## Day 33: CloudWatch Dashboards & SNS Alerting
+- Integrated Amazon SNS topics and email subscriptions with CloudWatch alarms.
+- Configured automated alarm action triggers (`AlarmActions`) for real-time incident notifications.
+- Documented pub/sub messaging patterns and single-pane-of-glass dashboard telemetry.
+
+# Module 08: Monitoring, Logging & Observability
+
+## Day 34: Module 08 Capstone Project — Observability Stack Integration
+- Successfully integrated CloudWatch Log Groups, SNS alerting topics, and CPU alarms into a master CloudFormation stack.
+- Configured automated metric evaluation thresholds and notification action routing.
+- Documented production monitoring and proactive incident management patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 35: IAM Policies & Least Privilege
+- Authored fine-grained IAM execution roles and trust policies via CloudFormation.
+- Enforced resource-level restrictions on S3 actions (`GetObject`, `PutObject`, `ListBucket`).
+- Documented identity perimeters and blast radius mitigation patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 36: IAM Permission Boundaries
+- Implemented IAM permission boundaries via CloudFormation to establish hard governance ceilings.
+- Documented delegated administration patterns and effective permission intersections.
+- Analyzed enterprise security guardrails to mitigate privilege escalation risks.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 37: AWS KMS & Data Encryption
+- Provisioned Customer Managed Keys (CMKs) and aliases via CloudFormation.
+- Configured automated key rotation policies and resource-level key permissions.
+- Documented data-at-rest encryption patterns and cryptographic security standards.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 38: AWS Secrets Manager
+- Implemented secure credential storage using AWS Secrets Manager via CloudFormation.
+- Integrated KMS custom encryption keys for data-at-rest protection of secret strings.
+- Documented dynamic runtime secret retrieval and rotation governance patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 39: AWS CloudTrail Auditing
+- Provisioned multi-region CloudTrail auditing trails via CloudFormation.
+- Configured secure S3 log storage buckets with explicit CloudTrail write permissions.
+- Documented cryptographic log file validation and account activity monitoring patterns.
+
+# Module 09: Security, Governance & Identity (IAM)
+
+## Day 40: Module 09 Capstone Project — Enterprise Security Stack
+- Successfully integrated KMS keys, permission boundaries, IAM roles, Secrets Manager, and CloudTrail into a master CloudFormation stack.
+- Enforced enterprise-grade least privilege, data-at-rest encryption, and immutable audit logging.
+- Documented comprehensive cloud security governance patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 41: VPC Peering & Routing
+- Provisioned multi-VPC topologies and subnets via CloudFormation.
+- Established direct VPC Peering connections with non-overlapping CIDR blocks.
+- Configured bidirectional route table forwarding rules for private inter-VPC traffic.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 42: AWS Transit Gateway
+- Provisioned central AWS Transit Gateway hubs via CloudFormation.
+- Connected multiple spoke VPCs using scalable Transit Gateway attachments.
+- Documented hub-and-spoke network topologies and enterprise routing best practices.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 43: AWS Site-to-Site VPN
+- Provisioned hybrid cloud networking primitives via CloudFormation.
+- Configured Virtual Private Gateways (VGW) and Customer Gateways (CGW).
+- Established redundant IPsec Site-to-Site VPN connection tunnels.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 44: AWS Direct Connect
+- Provisioned global Direct Connect Gateways via CloudFormation.
+- Configured virtual interfaces (VIFs), BGP parameters, and route filtering prefixes.
+- Documented dedicated fiber connectivity and enterprise hybrid architecture patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 45: VPC Flow Logs
+- Configured VPC Flow Logs via CloudFormation for comprehensive network traffic auditing.
+- Established secure S3 log buckets and IAM publishing execution roles.
+- Documented traffic capture categories (`ACCEPT`/`REJECT`) and security forensic analysis patterns.
+
+# Module 10: Advanced Networking & Hybrid Connectivity
+
+## Day 46: Module 10 Capstone Project — Enterprise Hybrid Network Stack
+- Successfully integrated Transit Gateway hubs, spoke VPCs, Site-to-Site VPNs, and Flow Logs into a master CloudFormation stack.
+- Enforced scalable hub-and-spoke routing, encrypted hybrid tunnels, and complete network traffic visibility.
+- Documented comprehensive cloud networking and hybrid architecture patterns.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 47: Amazon ECS & AWS Fargate
+- Provisioned Amazon ECS clusters and serverless Fargate task definitions via CloudFormation.
+- Configured IAM task execution roles and CloudWatch container logging streams.
+- Documented task-level network isolation patterns using `awsvpc` network modes.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 47: Amazon ECS & AWS Fargate
+- Provisioned ECS clusters and serverless Fargate task definitions.
+
+## Day 48: Amazon EKS (Elastic Kubernetes Service)
+- Provisioned managed Amazon EKS control planes via CloudFormation.
+- Configured EKS IAM service roles and multi-AZ VPC subnets for Kubernetes networking.
+- Documented managed Kubernetes architecture and control plane best practices.
+
+## Day 49: Amazon ECR (Elastic Container Registry)
+- Provisioned private ECR repositories via CloudFormation.
+- Configured immutable image tags and automated push-time CVE vulnerability scanning.
+- Documented enterprise container image security and storage best practices.
+
+# Module 11: Containerization, Orchestration & Microservices
+
+## Day 50: Module 11 Capstone Project — Enterprise Microservices Stack
+- Successfully integrated Amazon ECR, ECS Fargate, and Amazon EKS into a master CloudFormation stack.
+- Enforced secure container storage, serverless orchestration, and managed Kubernetes control planes.
+- Documented comprehensive containerization patterns and microservices architecture blueprints.
+
+# Module 12: Serverless Architecture & Event-Driven Computing
+
+## Day 51: AWS Lambda & Serverless Compute
+- Provisioned AWS Lambda functions and least-privilege IAM execution roles via CloudFormation.
+- Configured Python runtime environments, memory sizing, timeouts, and CloudWatch log integrations.
+- Documented event-driven serverless architecture and operational best practices.
+
+# Module 12: Serverless Architecture & Event-Driven Computing
+
+## Day 51: AWS Lambda & Serverless Compute
+- Provisioned AWS Lambda functions and IAM execution roles.
+
+## Day 52: Amazon API Gateway & Serverless HTTP Endpoints
+- Provisioned Amazon API Gateway REST APIs via CloudFormation.
+- Configured Lambda proxy integrations (`AWS_PROXY`), resource paths, and production deployment stages.
+- Documented secure API invocation permissions and event payload handling.
+
+## Day 53: Amazon DynamoDB & Serverless NoSQL Databases
+- Provisioned serverless DynamoDB tables via CloudFormation.
+- Configured on-demand billing modes (`PAY_PER_REQUEST`), composite primary keys, and Point-in-Time Recovery.
+- Documented NoSQL table design patterns and enterprise data protection.
+
+## Day 54: Amazon SQS (Simple Queue Service)
+- Provisioned enterprise SQS message queues via CloudFormation.
+- Configured Dead Letter Queues (DLQs), automated redrive policies, and message retention parameters.
+- Documented decoupled event-driven microservices architecture.
+
+## Day 55: Amazon SNS (Simple Notification Service)
+- Provisioned enterprise SNS pub/sub topics via CloudFormation.
+- Configured SNS-to-SQS fan-out subscriptions and secure SQS queue resource policies.
+- Documented event-driven pub/sub messaging and enterprise integration patterns.
+
+## Day 56: AWS Step Functions
+- Provisioned enterprise Step Functions state machines via CloudFormation.
+- Configured Amazon States Language (ASL) definitions and workflow execution roles.
+- Documented serverless workflow orchestration and state management patterns.
+
+# Module 12: Serverless Architecture & Event-Driven Computing
+
+## Day 57: Module 12 Capstone Project — End-to-End Serverless Architecture
+- Successfully integrated API Gateway, Lambda, DynamoDB, SQS, and SNS into a master CloudFormation stack.
+- Enforced secure proxy integrations, on-demand NoSQL scaling, and decoupled event messaging.
+- Documented comprehensive serverless event-driven architecture blueprints.
+
+# Module 13: Advanced Infrastructure as Code (IaC) & Terraform
+
+## Day 58: Introduction to Terraform & HCL Fundamentals
+- Initialized Terraform workspaces and configured AWS provider plugins for `af-south-1`.
+- Authored declarative HCL templates (`providers.tf`, `main.tf`) for VPC infrastructure provisioning.
+- Documented state management, provider versioning, and core Terraform lifecycle commands.
+
+# Module 13: Advanced Infrastructure as Code (IaC) & Terraform
+
+## Day 58: Introduction to Terraform & HCL Fundamentals
+- Initialized Terraform workspaces and configured AWS provider plugins for `af-south-1`.
+
+## Day 59: Terraform Variables & Parameterization
+- Implemented input variables (`variables.tf`) and assignment files (`terraform.tfvars`).
+- Parameterized VPC CIDR blocks, regions, and environment tagging.
+- Documented configuration best practices and validation commands (`terraform validate`).
+
+## Day 60: Terraform State Management & Remote Backends
+- Configured remote state storage using Amazon S3 buckets.
+- Implemented atomic state locking using Amazon DynamoDB tables.
+- Documented collaboration security, state encryption, and enterprise workflow best practices.

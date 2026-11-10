@@ -1,0 +1,74 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Module 08 Capstone: End-to-End Observability Stack with Log Groups, SNS Alerts, and CPU Alarms",
+    "Parameters": {
+      "InstanceId": {
+        "Type": "String",
+        "Description": "Target EC2 Instance ID to monitor and alert on."
+      },
+      "AlertEmail": {
+        "Type": "String",
+        "Description": "Email address for receiving CloudWatch alarm notifications."
+      }
+    },
+    "Resources": {
+      "CapstoneLogGroup": {
+        "Type": "AWS::Logs::LogGroup",
+        "Properties": {
+          "LogGroupName": "/aws/ec2/cloud-engineer-capstone-logs",
+          "RetentionInDays": 30
+        }
+      },
+      "CapstoneSNSTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": "cloud-engineer-capstone-alerts"
+        }
+      },
+      "CapstoneEmailSubscription": {
+        "Type": "AWS::SNS::Subscription",
+        "Properties": {
+          "TopicArn": { "Ref": "CapstoneSNSTopic" },
+          "Protocol": "email",
+          "Endpoint": { "Ref": "AlertEmail" }
+        }
+      },
+      "CapstoneCPUAlarm": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmName": "cloud-engineer-capstone-cpu-alarm",
+          "AlarmDescription": "Triggers SNS alert when EC2 instance CPU utilization exceeds 85% for 10 minutes",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": 300,
+          "EvaluationPeriods": 2,
+          "Threshold": 85.0,
+          "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "InstanceId" }
+            }
+          ],
+          "AlarmActions": [
+            { "Ref": "CapstoneSNSTopic" }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "LogGroupName": {
+        "Description": "Centralized CloudWatch Log Group Name",
+        "Value": { "Ref": "CapstoneLogGroup" }
+      },
+      "SNSTopicArn": {
+        "Description": "Amazon SNS Alert Topic ARN",
+        "Value": { "Ref": "CapstoneSNSTopic" }
+      },
+      "AlarmName": {
+        "Description": "CloudWatch High CPU Alarm Name",
+        "Value": { "Ref": "CapstoneCPUAlarm" }
+      }
+    }
+  }

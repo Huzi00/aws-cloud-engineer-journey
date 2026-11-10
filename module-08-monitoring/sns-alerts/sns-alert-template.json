@@ -1,0 +1,59 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Amazon SNS Alerting Integration with CloudWatch CPU Alarms",
+    "Parameters": {
+      "AlertEmail": {
+        "Type": "String",
+        "Description": "Email address to receive CloudWatch alarm notifications."
+      },
+      "InstanceId": {
+        "Type": "String",
+        "Description": "Target EC2 Instance ID for the monitored CPU alarm."
+      }
+    },
+    "Resources": {
+      "AlarmNotificationTopic": {
+        "Type": "AWS::SNS::Topic",
+        "Properties": {
+          "TopicName": "cloud-engineer-alerts-topic"
+        }
+      },
+      "EmailSubscription": {
+        "Type": "AWS::SNS::Subscription",
+        "Properties": {
+          "TopicArn": { "Ref": "AlarmNotificationTopic" },
+          "Protocol": "email",
+          "Endpoint": { "Ref": "AlertEmail" }
+        }
+      },
+      "HighCPUAlarmWithSNS": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmName": "cloud-engineer-sns-cpu-alarm",
+          "AlarmDescription": "Triggers SNS notification when EC2 CPU exceeds 85%",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": 300,
+          "EvaluationPeriods": 2,
+          "Threshold": 85.0,
+          "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+          "Dimensions": [
+            {
+              "Name": "InstanceId",
+              "Value": { "Ref": "InstanceId" }
+            }
+          ],
+          "AlarmActions": [
+            { "Ref": "AlarmNotificationTopic" }
+          ]
+        }
+      }
+    },
+    "Outputs": {
+      "SNSTopicArn": {
+        "Description": "ARN of the created SNS Notification Topic",
+        "Value": { "Ref": "AlarmNotificationTopic" }
+      }
+    }
+  }

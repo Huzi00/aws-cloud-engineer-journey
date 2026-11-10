@@ -1,0 +1,81 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Secure Amazon RDS Database Instance with Subnet Groups and Security Group Isolation",
+    "Parameters": {
+      "VpcId": {
+        "Type": "AWS::EC2::VPC::Id",
+        "Description": "Target VPC ID."
+      },
+      "SubnetOne": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "First private/public subnet for DB Subnet Group."
+      },
+      "SubnetTwo": {
+        "Type": "AWS::EC2::Subnet::Id",
+        "Description": "Second private/public subnet for DB Subnet Group."
+      },
+      "DBUser": {
+        "Type": "String",
+        "Description": "Database administrator username.",
+        "Default": "adminuser"
+      },
+      "DBPassword": {
+        "Type": "String",
+        "Description": "Database administrator password.",
+        "NoEcho": true
+      }
+    },
+    "Resources": {
+      "DBSecurityGroup": {
+        "Type": "AWS::EC2::SecurityGroup",
+        "Properties": {
+          "GroupDescription": "Allow inbound database traffic on port 3306",
+          "VpcId": { "Ref": "VpcId" },
+          "SecurityGroupIngress": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 3306,
+              "ToPort": 3306,
+              "CidrIp": "10.0.0.0/16"
+            }
+          ]
+        }
+      },
+      "DBSubnetGroup": {
+        "Type": "AWS::RDS::DBSubnetGroup",
+        "Properties": {
+          "DBSubnetGroupDescription": "Subnet group for RDS database instance",
+          "SubnetIds": [
+            { "Ref": "SubnetOne" },
+            { "Ref": "SubnetTwo" }
+          ]
+        }
+      },
+      "MyRDSInstance": {
+        "Type": "AWS::RDS::DBInstance",
+        "Properties": {
+          "DBInstanceIdentifier": "cloud-engineer-rds-db",
+          "Engine": "mysql",
+          "EngineVersion": "8.0",
+          "DBInstanceClass": "db.t3.micro",
+          "AllocatedStorage": "20",
+          "StorageType": "gp2",
+          "MasterUsername": { "Ref": "DBUser" },
+          "MasterUserPassword": { "Ref": "DBPassword" },
+          "DBSubnetGroupName": { "Ref": "DBSubnetGroup" },
+          "DBSecurityGroups": [],
+          "VpcSecurityGroupIds": [{ "Ref": "DBSecurityGroup" }],
+          "MultiAZ": false,
+          "StorageEncrypted": true,
+          "PubliclyAccessible": false,
+          "BackupRetentionPeriod": 7
+        }
+      }
+    },
+    "Outputs": {
+      "DBInstanceEndpoint": {
+        "Description": "Connection endpoint for the RDS database",
+        "Value": { "Fn::GetAtt": ["MyRDSInstance", "Endpoint.Address"] }
+      }
+    }
+  }

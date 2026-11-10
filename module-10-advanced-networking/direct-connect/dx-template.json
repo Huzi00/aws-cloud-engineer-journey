@@ -1,0 +1,39 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Advanced Networking: AWS Direct Connect Gateway & Dedicated Hybrid Routing",
+    "Resources": {
+      "DirectConnectGateway": {
+        "Type": "AWS::DirectConnect::DirectConnectGateway",
+        "Properties": {
+          "DirectConnectGatewayName": "enterprise-dx-gateway-hub",
+          "AmazonSideAsn": 64512
+        }
+      },
+      "DirectConnectVirtualInterface": {
+        "Type": "AWS::DirectConnect::PublicVirtualInterface",
+        "Properties": {
+          "ConnectionId": "dxcon-example99",
+          "NewPublicVirtualInterface": {
+            "VirtualInterfaceName": "enterprise-dx-vif",
+            "Vlan": 100,
+            "Asn": 65000,
+            "AddressFamily": "ipv4",
+            "AuthKey": "SecureDxBgpPassword123!",
+            "CustomerAddress": "192.0.2.1/30",
+            "AmazonAddress": "192.0.2.2/30",
+            "RouteFilterPrefixes": [
+              {
+                "Cidr": "10.0.0.0/16"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "DirectConnectGatewayId": {
+        "Description": "The ID of the Direct Connect Gateway",
+        "Value": { "Ref": "DirectConnectGateway" }
+      }
+    }
+  }

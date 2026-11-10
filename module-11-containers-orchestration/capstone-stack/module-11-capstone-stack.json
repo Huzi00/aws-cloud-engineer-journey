@@ -1,0 +1,195 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Module 11 Capstone: End-to-End Microservices Containerization and Orchestration Stack",
+  "Resources": {
+    "EnterpriseEcrRepository": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryName": "enterprise-capstone-microservice",
+        "ImageTagMutability": "IMMUTABLE",
+        "ImageScanningConfiguration": {
+          "ScanOnPush": true
+        },
+        "EncryptionConfiguration": {
+          "EncryptionType": "AES256"
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Production"
+          }
+        ]
+      }
+    },
+    "EnterpriseEcsCluster": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "ClusterName": "enterprise-capstone-ecs-cluster",
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Production"
+          }
+        ]
+      }
+    },
+    "EcsTaskExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "enterprise-capstone-ecs-execution-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+        ]
+      }
+    },
+    "EcsTaskDefinition": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "Family": "enterprise-capstone-app",
+        "Cpu": "256",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "ExecutionRoleArn": { "Fn::GetAtt": ["EcsTaskExecutionRole", "Arn"] },
+        "ContainerDefinitions": [
+          {
+            "Name": "microservice-node",
+            "Image": "public.ecr.aws/docker/library/node:18-alpine",
+            "Cpu": 256,
+            "Memory": 512,
+            "Essential": true,
+            "PortMappings": [
+              {
+                "ContainerPort": 3000,
+                "Protocol": "tcp"
+              }
+            ],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": "/ecs/enterprise-capstone",
+                "awslogs-region": "af-south-1",
+                "awslogs-stream-prefix": "app"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "CloudWatchLogsGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/ecs/enterprise-capstone",
+        "RetentionInDays": 30
+      }
+    },
+    "EksClusterRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "enterprise-capstone-eks-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "eks.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+        ]
+      }
+    },
+    "EksVpc": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "192.168.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "vpc-capstone-eks-network"
+          }
+        ]
+      }
+    },
+    "EksSubnetA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": { "Ref": "EksVpc" },
+        "CidrBlock": "192.168.1.0/24",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "subnet-capstone-eks-a"
+          }
+        ]
+      }
+    },
+    "EksSubnetB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": { "Ref": "EksVpc" },
+        "CidrBlock": "192.168.2.0/24",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "subnet-capstone-eks-b"
+          }
+        ]
+      }
+    },
+    "EnterpriseEksCluster": {
+      "Type": "AWS::EKS::Cluster",
+      "Properties": {
+        "Name": "enterprise-capstone-eks-cluster",
+        "RoleArn": { "Fn::GetAtt": ["EksClusterRole", "Arn"] },
+        "ResourcesVpcConfig": {
+          "SubnetIds": [
+            { "Ref": "EksSubnetA" },
+            { "Ref": "EksSubnetB" }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": "Production"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "EcrRepositoryUri": {
+      "Description": "The URI of the enterprise ECR repository",
+      "Value": { "Fn::GetAtt": ["EnterpriseEcrRepository", "RepositoryUri"] }
+    },
+    "EcsClusterName": {
+      "Description": "The name of the enterprise ECS Fargate cluster",
+      "Value": { "Ref": "EnterpriseEcsCluster" }
+    },
+    "EksClusterName": {
+      "Description": "The name of the enterprise managed EKS cluster",
+      "Value": { "Ref": "EnterpriseEksCluster" }
+    }
+  }
+}

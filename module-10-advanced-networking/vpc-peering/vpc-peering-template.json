@@ -1,0 +1,119 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Advanced Networking: Inter-VPC Peering and Route Table Configuration",
+    "Resources": {
+      "VpcA": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.10.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-network-alpha"
+            }
+          ]
+        }
+      },
+      "VpcB": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": "10.20.0.0/16",
+          "EnableDnsHostnames": true,
+          "EnableDnsSupport": true,
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "vpc-network-beta"
+            }
+          ]
+        }
+      },
+      "SubnetA": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "VpcA" },
+          "CidrBlock": "10.10.1.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-alpha-private"
+            }
+          ]
+        }
+      },
+      "SubnetB": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "VpcId": { "Ref": "VpcB" },
+          "CidrBlock": "10.20.1.0/24",
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "subnet-beta-private"
+            }
+          ]
+        }
+      },
+      "VpcPeeringConnection": {
+        "Type": "AWS::EC2::VPCPeeringConnection",
+        "Properties": {
+          "VpcId": { "Ref": "VpcA" },
+          "PeerVpcId": { "Ref": "VpcB" },
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "alpha-to-beta-peering"
+            }
+          ]
+        }
+      },
+      "RouteTableA": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": { "Ref": "VpcA" },
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "rtb-network-alpha"
+            }
+          ]
+        }
+      },
+      "RouteTableB": {
+        "Type": "AWS::EC2::RouteTable",
+        "Properties": {
+          "VpcId": { "Ref": "VpcB" },
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "rtb-network-beta"
+            }
+          ]
+        }
+      },
+      "PeerRouteToVpcB": {
+        "Type": "AWS::EC2::Route",
+        "Properties": {
+          "RouteTableId": { "Ref": "RouteTableA" },
+          "DestinationCidrBlock": "10.20.0.0/16",
+          "VpcPeeringConnectionId": { "Ref": "VpcPeeringConnection" }
+        }
+      },
+      "PeerRouteToVpcA": {
+        "Type": "AWS::EC2::Route",
+        "Properties": {
+          "RouteTableId": { "Ref": "RouteTableB" },
+          "DestinationCidrBlock": "10.10.0.0/16",
+          "VpcPeeringConnectionId": { "Ref": "VpcPeeringConnection" }
+        }
+      }
+    },
+    "Outputs": {
+      "VpcPeeringId": {
+        "Description": "The ID of the established VPC Peering Connection",
+        "Value": { "Ref": "VpcPeeringConnection" }
+      }
+    }
+  }

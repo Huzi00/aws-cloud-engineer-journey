@@ -1,0 +1,44 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS KMS Customer Managed Key for Encrypted Workloads",
+    "Resources": {
+      "ProductionEncryptionKey": {
+        "Type": "AWS::KMS::Key",
+        "Properties": {
+          "Description": "Customer managed encryption key for secure cloud workloads",
+          "EnableKeyRotation": true,
+          "KeyPolicy": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "Enable IAM User Permissions",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" }
+                },
+                "Action": "kms:*",
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      },
+      "EncryptionKeyAlias": {
+        "Type": "AWS::KMS::Alias",
+        "Properties": {
+          "AliasName": "alias/cloud-engineer-prod-key",
+          "TargetKeyId": { "Ref": "ProductionEncryptionKey" }
+        }
+      }
+    },
+    "Outputs": {
+      "KMSKeyId": {
+        "Description": "The ID of the Customer Managed KMS Key",
+        "Value": { "Ref": "ProductionEncryptionKey" }
+      },
+      "KMSKeyAlias": {
+        "Description": "The Alias identifier for the KMS Key",
+        "Value": { "Ref": "EncryptionKeyAlias" }
+      }
+    }
+  }
