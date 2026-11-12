@@ -8,3 +8,21 @@ variable "environment" {
   type        = string
   description = "Deployment environment name"
 }
+
+variable "azs" {
+  type        = list(string)
+  description = "List of Availability Zones"
+  default     = ["af-south-1a", "af-south-1b"]
+}
+
+variable "public_subnet_cidrs" {
+  type        = list(string)
+  description = "CIDR blocks for public subnets"
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+
+variable "private_subnet_cidrs" {
+  type        = list(string)
+  description = "CIDR blocks for private subnets"
+  default     = ["10.0.10.0/24", "10.0.20.0/24"]
+}
