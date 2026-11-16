@@ -1,0 +1,54 @@
+name: Terraform CI Validation & Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'module-14-terraform-modules/**'
+      - '.github/workflows/terraform-ci.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'module-14-terraform-modules/**'
+
+jobs:
+  terraform-ci:
+    name: Format, Validate & Security Scan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./module-14-terraform-modules
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: Terraform Format Check
+        id: fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (Offline / No Backend)
+        id: init
+        run: terraform init -backend=false
+
+      - name: Terraform Validate (Root Stack)
+        id: validate
+        run: terraform validate
+
+      - name: Validate Bootstrap State Stack
+        working-directory: ./module-14-terraform-modules/bootstrap
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+      - name: Run tfsec Static Security Analysis
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ./module-14-terraform-modules
+          soft_fail: true
