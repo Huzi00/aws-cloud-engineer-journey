@@ -9,24 +9,32 @@ terraform {
 }
 
 provider "aws" {
-  region = "af-south-1"
+  region = var.aws_region
+}
+
+locals {
+  env             = terraform.workspace
+  vpc_cidr        = lookup(var.vpc_cidr_map, local.env, "10.10.0.0/16")
+  public_subnets  = lookup(var.public_subnets_map, local.env, ["10.10.1.0/24", "10.10.2.0/24"])
+  private_subnets = lookup(var.private_subnets_map, local.env, ["10.10.10.0/24", "10.10.20.0/24"])
+  asg_max_size    = lookup(var.asg_max_size_map, local.env, 2)
 }
 
 # 1. Call the VPC Module
-module "dev_vpc" {
+module "vpc" {
   source               = "./modules/vpc"
-  vpc_cidr             = "10.10.0.0/16"
-  environment          = "dev-day66"
+  vpc_cidr             = local.vpc_cidr
+  environment          = local.env
   azs                  = ["af-south-1a", "af-south-1b"]
-  public_subnet_cidrs  = ["10.10.1.0/24", "10.10.2.0/24"]
-  private_subnet_cidrs = ["10.10.10.0/24", "10.10.20.0/24"]
+  public_subnet_cidrs  = local.public_subnets
+  private_subnet_cidrs = local.private_subnets
 }
 
 # 2. Security Group for ALB (Public-facing entry point)
 resource "aws_security_group" "alb_sg" {
-  name        = "dev-day66-alb-sg"
+  name        = "${local.env}-alb-sg"
   description = "Allow inbound HTTP traffic to ALB"
-  vpc_id      = module.dev_vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     description = "Allow HTTP from internet"
@@ -45,8 +53,8 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name        = "sg-alb-dev-day66"
-    Environment = "dev-day66"
+    Name        = "sg-alb-${local.env}"
+    Environment = local.env
     ManagedBy   = "Terraform"
   }
 }
@@ -54,9 +62,9 @@ resource "aws_security_group" "alb_sg" {
 # 3. Call the Hardened Security Group Module for EC2 (Chained to ALB SG)
 module "web_sg" {
   source      = "./modules/security-group"
-  sg_name     = "dev-day66-web-sg"
-  vpc_id      = module.dev_vpc.vpc_id
-  environment = "dev-day66"
+  sg_name     = "${local.env}-web-sg"
+  vpc_id      = module.vpc.vpc_id
+  environment = local.env
   alb_sg_id   = aws_security_group.alb_sg.id
 }
 
@@ -73,27 +81,27 @@ data "aws_ami" "amazon_linux" {
 
 # 5. Application Load Balancer
 resource "aws_lb" "web_alb" {
-  name               = "dev-day66-alb"
+  name               = "${local.env}-web-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = module.dev_vpc.public_subnet_ids
+  subnets            = module.vpc.public_subnet_ids
 
   enable_deletion_protection = false
 
   tags = {
-    Name        = "alb-dev-day66"
-    Environment = "dev-day66"
+    Name        = "alb-${local.env}"
+    Environment = local.env
     ManagedBy   = "Terraform"
   }
 }
 
 # 6. ALB Target Group
 resource "aws_lb_target_group" "web_tg" {
-  name     = "dev-day66-tg"
+  name     = "${local.env}-web-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = module.dev_vpc.vpc_id
+  vpc_id   = module.vpc.vpc_id
 
   health_check {
     path                = "/"
@@ -106,7 +114,7 @@ resource "aws_lb_target_group" "web_tg" {
   }
 
   tags = {
-    Environment = "dev-day66"
+    Environment = local.env
     ManagedBy   = "Terraform"
   }
 }
@@ -125,7 +133,7 @@ resource "aws_lb_listener" "http" {
 
 # 8. Launch Template for ASG
 resource "aws_launch_template" "web_lt" {
-  name_prefix   = "web-lt-"
+  name_prefix   = "${local.env}-web-lt-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
@@ -140,15 +148,15 @@ resource "aws_launch_template" "web_lt" {
               dnf install -y httpd
               systemctl start httpd
               systemctl enable httpd
-              echo "<h1>Hello from Hardened Terraform ASG on Day 66!</h1>" > /var/www/html/index.html
+              echo "<h1>Environment: ${local.env} | Terraform ASG</h1>" > /var/www/html/index.html
               EOF
   )
 
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "asg-web-server"
-      Environment = "dev-day66"
+      Name        = "asg-web-server-${local.env}"
+      Environment = local.env
       ManagedBy   = "Terraform"
     }
   }
@@ -156,10 +164,11 @@ resource "aws_launch_template" "web_lt" {
 
 # 9. Auto Scaling Group (ASG)
 resource "aws_autoscaling_group" "web_asg" {
+  name                = "${local.env}-web-asg"
   desired_capacity    = 1
   min_size            = 1
-  max_size            = 3
-  vpc_zone_identifier = module.dev_vpc.public_subnet_ids
+  max_size            = local.asg_max_size
+  vpc_zone_identifier = module.vpc.public_subnet_ids
   target_group_arns   = [aws_lb_target_group.web_tg.arn]
 
   launch_template {
@@ -169,14 +178,14 @@ resource "aws_autoscaling_group" "web_asg" {
 
   tag {
     key                 = "Name"
-    value               = "asg-instance-node"
+    value               = "asg-instance-${local.env}"
     propagate_at_launch = true
   }
 }
 
 # 10. Target Tracking Auto Scaling Policy (CPU-based)
 resource "aws_autoscaling_policy" "cpu_target_tracking" {
-  name                   = "cpu-target-tracking-policy"
+  name                   = "${local.env}-cpu-target-tracking"
   autoscaling_group_name = aws_autoscaling_group.web_asg.name
   policy_type            = "TargetTrackingScaling"
 
@@ -189,8 +198,12 @@ resource "aws_autoscaling_policy" "cpu_target_tracking" {
 }
 
 # Root Outputs
-output "dev_vpc_id" {
-  value = module.dev_vpc.vpc_id
+output "active_environment" {
+  value = local.env
+}
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
 }
 
 output "alb_dns_name" {
