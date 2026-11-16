@@ -16,34 +16,15 @@ provider "aws" {
 module "dev_vpc" {
   source               = "./modules/vpc"
   vpc_cidr             = "10.10.0.0/16"
-  environment          = "dev-day65"
+  environment          = "dev-day66"
   azs                  = ["af-south-1a", "af-south-1b"]
   public_subnet_cidrs  = ["10.10.1.0/24", "10.10.2.0/24"]
   private_subnet_cidrs = ["10.10.10.0/24", "10.10.20.0/24"]
 }
 
-# 2. Call the Security Group Module for EC2
-module "web_sg" {
-  source      = "./modules/security-group"
-  sg_name     = "dev-day65-web-sg"
-  vpc_id      = module.dev_vpc.vpc_id
-  environment = "dev-day65"
-}
-
-# 3. Fetch Latest Amazon Linux 2023 AMI
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-*-kernel-6.1-x86_64"]
-  }
-}
-
-# 4. Security Group for ALB
+# 2. Security Group for ALB (Public-facing entry point)
 resource "aws_security_group" "alb_sg" {
-  name        = "dev-day65-alb-sg"
+  name        = "dev-day66-alb-sg"
   description = "Allow inbound HTTP traffic to ALB"
   vpc_id      = module.dev_vpc.vpc_id
 
@@ -64,15 +45,35 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name        = "sg-alb-dev-day65"
-    Environment = "dev-day65"
+    Name        = "sg-alb-dev-day66"
+    Environment = "dev-day66"
     ManagedBy   = "Terraform"
+  }
+}
+
+# 3. Call the Hardened Security Group Module for EC2 (Chained to ALB SG)
+module "web_sg" {
+  source      = "./modules/security-group"
+  sg_name     = "dev-day66-web-sg"
+  vpc_id      = module.dev_vpc.vpc_id
+  environment = "dev-day66"
+  alb_sg_id   = aws_security_group.alb_sg.id
+}
+
+# 4. Fetch Latest Amazon Linux 2023 AMI
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-kernel-6.1-x86_64"]
   }
 }
 
 # 5. Application Load Balancer
 resource "aws_lb" "web_alb" {
-  name               = "dev-day65-alb"
+  name               = "dev-day66-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
@@ -81,15 +82,15 @@ resource "aws_lb" "web_alb" {
   enable_deletion_protection = false
 
   tags = {
-    Name        = "alb-dev-day65"
-    Environment = "dev-day65"
+    Name        = "alb-dev-day66"
+    Environment = "dev-day66"
     ManagedBy   = "Terraform"
   }
 }
 
 # 6. ALB Target Group
 resource "aws_lb_target_group" "web_tg" {
-  name     = "dev-day65-tg"
+  name     = "dev-day66-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = module.dev_vpc.vpc_id
@@ -105,7 +106,7 @@ resource "aws_lb_target_group" "web_tg" {
   }
 
   tags = {
-    Environment = "dev-day65"
+    Environment = "dev-day66"
     ManagedBy   = "Terraform"
   }
 }
@@ -139,7 +140,7 @@ resource "aws_launch_template" "web_lt" {
               dnf install -y httpd
               systemctl start httpd
               systemctl enable httpd
-              echo "<h1>Hello from Terraform ASG on Day 65!</h1>" > /var/www/html/index.html
+              echo "<h1>Hello from Hardened Terraform ASG on Day 66!</h1>" > /var/www/html/index.html
               EOF
   )
 
@@ -147,7 +148,7 @@ resource "aws_launch_template" "web_lt" {
     resource_type = "instance"
     tags = {
       Name        = "asg-web-server"
-      Environment = "dev-day65"
+      Environment = "dev-day66"
       ManagedBy   = "Terraform"
     }
   }
@@ -157,7 +158,7 @@ resource "aws_launch_template" "web_lt" {
 resource "aws_autoscaling_group" "web_asg" {
   desired_capacity    = 1
   min_size            = 1
-  max_size            = 2
+  max_size            = 3
   vpc_zone_identifier = module.dev_vpc.public_subnet_ids
   target_group_arns   = [aws_lb_target_group.web_tg.arn]
 
@@ -170,6 +171,20 @@ resource "aws_autoscaling_group" "web_asg" {
     key                 = "Name"
     value               = "asg-instance-node"
     propagate_at_launch = true
+  }
+}
+
+# 10. Target Tracking Auto Scaling Policy (CPU-based)
+resource "aws_autoscaling_policy" "cpu_target_tracking" {
+  name                   = "cpu-target-tracking-policy"
+  autoscaling_group_name = aws_autoscaling_group.web_asg.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
   }
 }
 

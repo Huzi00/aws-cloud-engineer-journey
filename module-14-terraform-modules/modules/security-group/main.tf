@@ -1,22 +1,14 @@
 resource "aws_security_group" "web_sg" {
   name        = var.sg_name
-  description = "Allow inbound traffic for web and SSH"
+  description = "Allow inbound HTTP strictly from the ALB"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Allow HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description     = "Allow HTTP from ALB only"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [var.alb_sg_id]
   }
 
   egress {

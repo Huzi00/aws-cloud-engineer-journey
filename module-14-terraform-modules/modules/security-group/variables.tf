@@ -12,3 +12,8 @@ variable "environment" {
   type        = string
   description = "Deployment environment name"
 }
+
+variable "alb_sg_id" {
+  type        = string
+  description = "Security Group ID of the ALB allowed to send HTTP traffic"
+}
