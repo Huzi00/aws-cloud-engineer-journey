@@ -160,6 +160,10 @@ resource "aws_launch_template" "web_lt" {
       ManagedBy   = "Terraform"
     }
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # 9. Auto Scaling Group (ASG)
@@ -174,6 +178,17 @@ resource "aws_autoscaling_group" "web_asg" {
   launch_template {
     id      = aws_launch_template.web_lt.id
     version = "$Latest"
+  }
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [desired_capacity]
   }
 
   tag {
