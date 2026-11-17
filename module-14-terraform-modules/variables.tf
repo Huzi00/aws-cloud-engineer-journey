@@ -47,3 +47,14 @@ variable "asg_max_size_map" {
     prod    = 6
   }
 }
+
+variable "enable_nat_map" {
+  type        = map(bool)
+  description = "Enable NAT Gateway per workspace"
+  default = {
+    default = false
+    dev     = false
+    staging = true
+    prod    = true
+  }
+}

@@ -18,6 +18,7 @@ locals {
   public_subnets  = lookup(var.public_subnets_map, local.env, ["10.10.1.0/24", "10.10.2.0/24"])
   private_subnets = lookup(var.private_subnets_map, local.env, ["10.10.10.0/24", "10.10.20.0/24"])
   asg_max_size    = lookup(var.asg_max_size_map, local.env, 2)
+  enable_nat      = lookup(var.enable_nat_map, local.env, false)
 }
 
 # 1. Call the VPC Module
@@ -25,9 +26,11 @@ module "vpc" {
   source               = "./modules/vpc"
   vpc_cidr             = local.vpc_cidr
   environment          = local.env
+  aws_region           = var.aws_region
   azs                  = ["af-south-1a", "af-south-1b"]
   public_subnet_cidrs  = local.public_subnets
   private_subnet_cidrs = local.private_subnets
+  enable_nat_gateway   = local.enable_nat
 }
 
 # 2. Security Group for ALB (Public-facing entry point)
@@ -150,7 +153,7 @@ resource "aws_launch_template" "web_lt" {
   }
 
   network_interfaces {
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups             = [module.web_sg.sg_id]
   }
 
@@ -184,7 +187,7 @@ resource "aws_autoscaling_group" "web_asg" {
   desired_capacity    = 1
   min_size            = 1
   max_size            = local.asg_max_size
-  vpc_zone_identifier = module.vpc.public_subnet_ids
+  vpc_zone_identifier = module.vpc.private_subnet_ids
   target_group_arns   = [aws_lb_target_group.web_tg.arn]
 
   launch_template {
