@@ -68,6 +68,14 @@ module "web_sg" {
   alb_sg_id   = aws_security_group.alb_sg.id
 }
 
+# 3b. Call the Least-Privilege IAM Module for EC2 Instances
+module "ec2_iam" {
+  source                = "./modules/iam"
+  environment           = local.env
+  role_name_prefix      = "web-ec2"
+  allowed_s3_bucket_arn = "arn:aws:s3:::huzi00-app-assets-${local.env}"
+}
+
 # 4. Fetch Latest Amazon Linux 2023 AMI
 data "aws_ami" "amazon_linux" {
   most_recent = true
@@ -136,6 +144,10 @@ resource "aws_launch_template" "web_lt" {
   name_prefix   = "${local.env}-web-lt-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
+
+  iam_instance_profile {
+    name = module.ec2_iam.iam_instance_profile_name
+  }
 
   network_interfaces {
     associate_public_ip_address = true
