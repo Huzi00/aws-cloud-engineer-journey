@@ -397,3 +397,34 @@ This directory tracks virtualization primitives, Docker containerization, image 
 - Configured remote state storage using Amazon S3 buckets.
 - Implemented atomic state locking using Amazon DynamoDB tables.
 - Documented collaboration security, state encryption, and enterprise workflow best practices.
+
+- **Day 61:** Terraform Fundamentals — Providers, Resources, Variables & Local State Basics
+
+- **Day 62:** Terraform Data Sources, Dynamic AMI Lookups (`af-south-1`), Outputs & Interpolation
+
+- **Day 63:** Terraform VPC Architecture — Multi-AZ Subnets, Internet Gateway & Route Tables
+
+- **Day 64:** High Availability — Application Load Balancer (ALB), Target Groups & HTTP Listeners
+
+- **Day 65:** Elastic Compute — Launch Templates, Auto Scaling Groups & CPU Target Tracking Policies
+
+- **Day 66:** Security Hardening — Modular Security Groups & Chained ALB-to-EC2 Ingress Rules
+
+- **Day 67:** Remote State Management — Bootstrapped S3 Backend with Encryption & DynamoDB State Locking
+
+- **Day 68:** Multi-Environment Isolation — Terraform Workspaces (`dev`, `staging`, `prod`) & Dynamic `lookup()` Maps
+
+- **Day 69:** Infrastructure CI/CD — Automated GitHub Actions (`terraform fmt`, `validate` & `tfsec` Security Scans)
+
+- **Day 70:** Zero-Downtime Operations — `lifecycle` Meta-Arguments, ASG Instance Refresh & State Drift Runbook
+
+- **Day 71:** Least-Privilege IAM — Reusable IAM Module, EC2 Instance Profiles & Keyless SSM Policies
+
+- **Day 72:** Defense-in-Depth Networking — Private Subnet ASG Isolation, S3 VPC Gateway Endpoint & Conditional NAT Gateway
+
+- **Day 73:** Stateless Application Tier — Reusable On-Demand DynamoDB Module (`PAY_PER_REQUEST`), TTL & Scoped IAM
+
+- **Day 74:** Observability & Alerting — CloudWatch Log Groups, ALB 5XX / Unhealthy Host Alarms & SNS Topics
+
+# Day 75: Secure Configuration & Secrets Management — AWS Systems Manager Parameter Store
+Centralized configuration management and secrets handling by building a reusable SSM Parameter Store module for environment-scoped parameters and encrypted SecureString secrets, locking down instance access with least-privilege IAM policies restricted to your exact parameter path prefix.
