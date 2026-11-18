@@ -58,3 +58,25 @@ variable "enable_nat_map" {
     prod    = true
   }
 }
+
+variable "enable_pitr_map" {
+  type        = map(bool)
+  description = "Enable DynamoDB Point-in-Time Recovery per workspace"
+  default = {
+    default = false
+    dev     = false
+    staging = false
+    prod    = true
+  }
+}
+
+variable "log_retention_map" {
+  type        = map(number)
+  description = "CloudWatch Log retention days per workspace"
+  default = {
+    default = 7
+    dev     = 7
+    staging = 14
+    prod    = 30
+  }
+}

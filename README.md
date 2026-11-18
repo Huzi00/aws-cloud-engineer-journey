@@ -428,3 +428,8 @@ This directory tracks virtualization primitives, Docker containerization, image 
 
 # Day 75: Secure Configuration & Secrets Management — AWS Systems Manager Parameter Store
 Centralized configuration management and secrets handling by building a reusable SSM Parameter Store module for environment-scoped parameters and encrypted SecureString secrets, locking down instance access with least-privilege IAM policies restricted to your exact parameter path prefix.
+
+## Day 76: Containerized Workloads — Amazon ECS Fargate & ALB Integration
+- Migrated application compute from EC2 Auto Scaling instances to serverless Amazon ECS on Fargate.
+- Configured `awsvpc` task definitions, secure logging drivers, and private subnet service networking behind the Application Load Balancer.
+- Validated serverless container architecture via local `terraform plan` dry-runs and GitHub Actions CI at R0 cost.

@@ -19,6 +19,8 @@ locals {
   private_subnets = lookup(var.private_subnets_map, local.env, ["10.10.10.0/24", "10.10.20.0/24"])
   asg_max_size    = lookup(var.asg_max_size_map, local.env, 2)
   enable_nat      = lookup(var.enable_nat_map, local.env, false)
+  enable_pitr     = lookup(var.enable_pitr_map, local.env, false)
+  log_retention   = lookup(var.log_retention_map, local.env, 7)
 }
 
 # 1. Call the VPC Module
@@ -71,12 +73,26 @@ module "web_sg" {
   alb_sg_id   = aws_security_group.alb_sg.id
 }
 
-# 3b. Call the Least-Privilege IAM Module for EC2 Instances
+# 3d. Call the SSM Parameter Store Configuration Module
+module "app_config" {
+  source      = "./modules/ssm"
+  environment = local.env
+  app_config = {
+    log_level       = local.env == "prod" ? "warn" : "debug"
+    max_connections = local.env == "prod" ? "500" : "50"
+  }
+  db_endpoint = module.sessions_db.table_name
+}
+
+# 3c. Call the Least-Privilege IAM Module for EC2 Instances
 module "ec2_iam" {
-  source                = "./modules/iam"
-  environment           = local.env
-  role_name_prefix      = "web-ec2"
-  allowed_s3_bucket_arn = "arn:aws:s3:::huzi00-app-assets-${local.env}"
+  source                     = "./modules/iam"
+  environment                = local.env
+  role_name_prefix           = "web-ec2"
+  allowed_s3_bucket_arn      = "arn:aws:s3:::huzi00-app-assets-${local.env}"
+  allowed_dynamodb_table_arn = module.sessions_db.table_arn
+  allowed_log_group_arn      = module.monitoring.log_group_arn
+  allowed_ssm_parameter_path = module.app_config.parameter_path_prefix
 }
 
 # 4. Fetch Latest Amazon Linux 2023 AMI
@@ -142,6 +158,15 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+# 7b. Call the CloudWatch & SNS Monitoring Module
+module "monitoring" {
+  source                  = "./modules/monitoring"
+  environment             = local.env
+  log_retention_days      = local.log_retention
+  alb_arn_suffix          = aws_lb.web_alb.arn_suffix
+  target_group_arn_suffix = aws_lb_target_group.web_tg.arn_suffix
+}
+
 # 8. Launch Template for ASG
 resource "aws_launch_template" "web_lt" {
   name_prefix   = "${local.env}-web-lt-"
@@ -154,7 +179,7 @@ resource "aws_launch_template" "web_lt" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [module.web_sg.sg_id]
+    security_groups             = [module.security_groups.web_sg_id]
   }
 
   user_data = base64encode(<<-EOF
@@ -239,4 +264,19 @@ output "vpc_id" {
 output "alb_dns_name" {
   description = "DNS name of the application load balancer"
   value       = aws_lb.web_alb.dns_name
+}
+
+output "dynamodb_table_name" {
+  description = "Name of the DynamoDB session store table"
+  value       = module.sessions_db.table_name
+}
+
+output "alerts_sns_topic_arn" {
+  description = "SNS Topic ARN for CloudWatch alarms"
+  value       = module.monitoring.sns_topic_arn
+}
+
+output "ssm_parameter_path" {
+  description = "SSM parameter path prefix for application configs"
+  value       = module.app_config.parameter_path_prefix
 }
