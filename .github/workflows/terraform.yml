@@ -39,12 +39,8 @@ jobs:
         run: |
           mv backend.tf.disabled backend.tf || true
 
-      - name: Run TFLint (Linter)
-        uses: tflint-actions/setup-tflint@v3
-        with:
-          tflint_version: v0.50.0
-        
-      - name: Run TFLint Inspection
+      - name: Run TFLint Linter
         run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           tflint --init
           tflint
