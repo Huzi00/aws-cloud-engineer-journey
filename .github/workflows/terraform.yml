@@ -1,0 +1,50 @@
+name: "Terraform CI Validation & Security Scan"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  terraform-ci:
+    name: "Format, Validate & Security Scan"
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./module-14-terraform-modules
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+
+      - name: Verify Terraform Formatting
+        run: terraform fmt -check -recursive
+
+      - name: Initialize Terraform (Backend Disabled for Dry-Run)
+        run: |
+          mv backend.tf backend.tf.disabled || true
+          terraform init
+
+      - name: Validate Terraform Configuration
+        run: terraform validate
+
+      - name: Restore Backend Configuration
+        run: |
+          mv backend.tf.disabled backend.tf || true
+
+      - name: Run TFLint (Linter)
+        uses: tflint-actions/setup-tflint@v3
+        with:
+          tflint_version: v0.50.0
+        
+      - name: Run TFLint Inspection
+        run: |
+          tflint --init
+          tflint
