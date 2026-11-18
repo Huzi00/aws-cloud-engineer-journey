@@ -27,11 +27,14 @@ jobs:
       - name: Verify Terraform Formatting
         run: terraform fmt -check -recursive
 
-      - name: Initialize Local Modules & Backend
+      - name: Initialize Terraform (Local for Validation)
         run: terraform init -backend=false
 
       - name: Validate Terraform Configuration
         run: terraform validate
+
+      - name: Re-initialize for Workspace Planning (Mock/Local State for CI)
+        run: terraform init -reconfigure -backend=false
 
       - name: Terraform Plan (Dev Workspace)
         run: |
