@@ -27,12 +27,11 @@ jobs:
       - name: Verify Terraform Formatting
         run: terraform fmt -check -recursive
 
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: v0.50.0
-
-      - name: Run TFLint Inspection
+      - name: Install and Run TFLint
         run: |
+          curl -sL https://github.com/terraform-linters/tflint/releases/download/v0.50.0/tflint_linux_amd64.zip -o tflint.zip
+          unzip tflint.zip
+          sudo mv tflint /usr/local/bin/
+          tflint --version
           tflint --init
           tflint
