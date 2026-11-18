@@ -27,10 +27,8 @@ jobs:
       - name: Verify Terraform Formatting
         run: terraform fmt -check -recursive
 
-      - name: Initialize Terraform
+      - name: Initialize Local Modules & Provider Plugins
         run: terraform init -backend=false
 
       - name: Validate Terraform Configuration
-        run: |
-          echo "Running terraform validate..."
-          terraform validate
+        run: terraform validate
