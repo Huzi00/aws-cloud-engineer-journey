@@ -33,12 +33,14 @@ jobs:
       - name: Validate Terraform Configuration
         run: terraform validate
 
+      # 6. Create/select Dev workspace
       - name: Terraform Plan (Dev Workspace)
         run: |
           terraform workspace select dev || terraform workspace new dev
-          terraform plan -backend=false -no-color
+          terraform plan -input=false -refresh=false -no-color
 
+      # 7. Create/select Prod workspace
       - name: Terraform Plan (Prod Workspace)
         run: |
           terraform workspace select prod || terraform workspace new prod
-          terraform plan -backend=false -no-color
+          terraform plan -input=false -refresh=false -no-color
