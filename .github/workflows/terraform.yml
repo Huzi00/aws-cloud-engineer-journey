@@ -19,6 +19,7 @@ jobs:
       AWS_ACCESS_KEY_ID: "mock_access_key"
       AWS_SECRET_ACCESS_KEY: "mock_secret_key"
       AWS_DEFAULT_REGION: "af-south-1"
+      TF_VAR_ci_ami_override: "ami-12345678"
 
     steps:
       - name: Checkout Repository

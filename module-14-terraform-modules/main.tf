@@ -105,7 +105,12 @@ module "ec2_iam" {
   allowed_ssm_parameter_path = module.app_config.parameter_path_prefix
 }
 
-# 4. Fetch Latest Amazon Linux 2023 AMI (with fallback for offline CI planning)
+# 4. Fallback AMI for offline CI planning without AWS API access
+variable "ci_ami_override" {
+  type    = string
+  default = ""
+}
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -180,7 +185,7 @@ module "monitoring" {
 # 8. Launch Template for ASG
 resource "aws_launch_template" "web_lt" {
   name_prefix   = "${local.env}-web-lt-"
-  image_id      = data.aws_ami.amazon_linux.id
+  image_id      = var.ci_ami_override != "" ? var.ci_ami_override : data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
   iam_instance_profile {
