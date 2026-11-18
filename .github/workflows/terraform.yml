@@ -15,6 +15,11 @@ jobs:
       run:
         working-directory: ./module-14-terraform-modules
 
+    env:
+      AWS_ACCESS_KEY_ID: "mock_access_key"
+      AWS_SECRET_ACCESS_KEY: "mock_secret_key"
+      AWS_DEFAULT_REGION: "af-south-1"
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -33,14 +38,12 @@ jobs:
       - name: Validate Terraform Configuration
         run: terraform validate
 
-      # 6. Create/select Dev workspace
       - name: Terraform Plan (Dev Workspace)
         run: |
           terraform workspace select dev || terraform workspace new dev
-          terraform plan -input=false -refresh=false -no-color
+          terraform plan -no-color
 
-      # 7. Create/select Prod workspace
       - name: Terraform Plan (Prod Workspace)
         run: |
           terraform workspace select prod || terraform workspace new prod
-          terraform plan -input=false -refresh=false -no-color
+          terraform plan -no-color
