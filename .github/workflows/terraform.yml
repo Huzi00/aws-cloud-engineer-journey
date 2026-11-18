@@ -31,4 +31,6 @@ jobs:
         run: terraform init -backend=false
 
       - name: Validate Terraform Configuration
-        run: terraform validate
+        run: |
+          echo "Running terraform validate..."
+          terraform validate
