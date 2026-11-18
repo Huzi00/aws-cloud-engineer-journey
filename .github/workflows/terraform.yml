@@ -27,17 +27,11 @@ jobs:
       - name: Verify Terraform Formatting
         run: terraform fmt -check -recursive
 
-      - name: Initialize Terraform (Backend Disabled for Dry-Run)
-        run: |
-          mv backend.tf backend.tf.disabled || true
-          terraform init
+      - name: Initialize Terraform (Local Backend for CI)
+        run: terraform init -backend=false
 
       - name: Validate Terraform Configuration
         run: terraform validate
-
-      - name: Restore Backend Configuration
-        run: |
-          mv backend.tf.disabled backend.tf || true
 
       - name: Run TFLint Linter
         run: |
