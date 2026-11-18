@@ -73,7 +73,7 @@ module "web_sg" {
   alb_sg_id   = aws_security_group.alb_sg.id
 }
 
-# 3d. Call the SSM Parameter Store Configuration Module
+# 3a. Call the SSM Parameter Store Configuration Module
 module "app_config" {
   source      = "./modules/ssm"
   environment = local.env
@@ -82,6 +82,13 @@ module "app_config" {
     max_connections = local.env == "prod" ? "500" : "50"
   }
   db_endpoint = module.sessions_db.table_name
+}
+
+# 3b. Call the Reusable DynamoDB Module for Stateless Session Persistence
+module "sessions_db" {
+  source      = "./modules/dynamodb"
+  environment = local.env
+  table_name  = "user-sessions"
 }
 
 # 3c. Call the Least-Privilege IAM Module for EC2 Instances
@@ -179,7 +186,7 @@ resource "aws_launch_template" "web_lt" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [module.security_groups.web_sg_id]
+    security_groups             = [module.web_sg.sg_id]
   }
 
   user_data = base64encode(<<-EOF
