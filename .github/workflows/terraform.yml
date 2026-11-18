@@ -35,12 +35,10 @@ jobs:
 
       - name: Terraform Plan (Dev Workspace)
         run: |
-          terraform init -reconfigure -backend=false
           terraform workspace select dev || terraform workspace new dev
-          terraform plan -no-color
+          terraform plan -backend=false -no-color
 
       - name: Terraform Plan (Prod Workspace)
         run: |
-          terraform init -reconfigure -backend=false
           terraform workspace select prod || terraform workspace new prod
-          terraform plan -no-color
+          terraform plan -backend=false -no-color
