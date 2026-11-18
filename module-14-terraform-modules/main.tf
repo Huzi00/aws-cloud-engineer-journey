@@ -105,7 +105,7 @@ module "ec2_iam" {
   allowed_ssm_parameter_path = module.app_config.parameter_path_prefix
 }
 
-# 4. Fetch Latest Amazon Linux 2023 AMI
+# 4. Fetch Latest Amazon Linux 2023 AMI (with fallback for offline CI planning)
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
