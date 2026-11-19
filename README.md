@@ -465,3 +465,8 @@ Centralized configuration management and secrets handling by building a reusable
 ## Day 84: Destroy-Action Guardrails & Plan Artifact Hygiene
 - Updated `Write Workspace Plan Summary` in `.github/workflows/terraform.yml` to parse `to destroy` counts from `dev` and `prod` plan logs and surface warnings in `$GITHUB_STEP_SUMMARY` whenever resource destructions are proposed.
 - Added `*.tfplan` and `plan_*.log` to `.gitignore` to keep temporary plan artifacts out of version control while maintaining R0-cost CI planning.
+
+## Day 85: CI Workspace Cleanup & Operational Runbook Clarity
+- Added a post-summary cleanup step (`Clean Up Temporary Plan Logs` with `if: always()`) in `.github/workflows/terraform.yml` to remove `plan_dev.log` and `plan_prod.log` after every run.
+- Reviewed multi-workspace (`dev` vs. `prod`) operational flow and kept zero-cost Terraform formatting, validation, and planning intact.
+

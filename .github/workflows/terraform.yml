@@ -78,3 +78,7 @@ jobs:
               fi
             done
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Clean Up Temporary Plan Logs
+        if: always()
+        run: rm -f plan_dev.log plan_prod.log
