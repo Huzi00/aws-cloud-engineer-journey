@@ -186,7 +186,7 @@ module "monitoring" {
 # 8. Launch Template for ASG
 resource "aws_launch_template" "web_lt" {
   name_prefix   = "${local.env}-web-lt-"
-  image_id = var.ci_ami_override != "" ? var.ci_ami_override : data.aws_ami.amazon_linux[0].id
+  image_id      = var.ci_ami_override != "" ? var.ci_ami_override : data.aws_ami.amazon_linux[0].id
   instance_type = "t3.micro"
 
   iam_instance_profile {
