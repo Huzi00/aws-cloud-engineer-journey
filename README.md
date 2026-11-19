@@ -453,3 +453,7 @@ Centralized configuration management and secrets handling by building a reusable
 - Added step IDs (`plan_dev`, `plan_prod`) and a `Write Workspace Plan Summary` step in GitHub Actions to report `dev` and `prod` workspace plan outcomes in `$GITHUB_STEP_SUMMARY`.
 - Reviewed launch template lifecycle (`create_before_destroy`), ASG rolling instance refresh, and module dependencies across `module-14-terraform-modules/main.tf`.
 - Verified configuration validity with `terraform fmt -check -recursive` and `terraform validate` while keeping R0-cost CI planning intact.
+
+## Day 82: Workflow Concurrency & CI Guardrails
+- Added workflow `concurrency` control (`cancel-in-progress: true`) per `github.ref` in `.github/workflows/terraform.yml` to cancel outdated runs on rapid commits.
+- Reviewed workspace plan visibility and environment differences (`dev` vs. `prod`) across the multi-module Terraform configuration while keeping R0-cost CI planning intact.

@@ -11,6 +11,10 @@ jobs:
   terraform-ci:
     name: "Terraform Validate & Plan"
     runs-on: ubuntu-latest
+    
+    concurrency:
+      group: terraform-ci-${{ github.ref }}
+      cancel-in-progress: true
 
     defaults:
       run:
