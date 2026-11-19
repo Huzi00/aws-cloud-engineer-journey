@@ -41,10 +41,10 @@ jobs:
 
       - name: Terraform Plan (Dev Workspace)
         run: |
-          terraform workspace select dev 2>/dev/null || terraform workspace new dev
+          terraform workspace select -or-create dev
           terraform plan -input=false -refresh=false -no-color
 
       - name: Terraform Plan (Prod Workspace)
         run: |
-          terraform workspace select prod 2>/dev/null || terraform workspace new prod
+          terraform workspace select -or-create prod
           terraform plan -input=false -refresh=false -no-color
