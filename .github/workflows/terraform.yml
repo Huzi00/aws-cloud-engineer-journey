@@ -44,7 +44,7 @@ jobs:
       - name: Validate Terraform Configuration
         run: terraform validate
 
-     - name: Terraform Plan (Dev Workspace)
+      - name: Terraform Plan (Dev Workspace)
         id: plan_dev
         run: |
           terraform workspace select -or-create dev
@@ -66,6 +66,6 @@ jobs:
             echo ""
             echo "| Workspace | Status | Plan Summary |"
             echo "| --- | --- | --- |"
-            echo "| \`dev\` | \${{ steps.plan_dev.outcome }} | ${DEV_PLAN} |"
-            echo "| \`prod\` | \${{ steps.plan_prod.outcome }} | ${PROD_PLAN} |"
+            echo "| \`dev\` | ${{ steps.plan_dev.outcome }} | ${DEV_PLAN} |"
+            echo "| \`prod\` | ${{ steps.plan_prod.outcome }} | ${PROD_PLAN} |"
           } >> "$GITHUB_STEP_SUMMARY"
