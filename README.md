@@ -457,3 +457,7 @@ Centralized configuration management and secrets handling by building a reusable
 ## Day 82: Workflow Concurrency & CI Guardrails
 - Added workflow `concurrency` control (`cancel-in-progress: true`) per `github.ref` in `.github/workflows/terraform.yml` to cancel outdated runs on rapid commits.
 - Reviewed workspace plan visibility and environment differences (`dev` vs. `prod`) across the multi-module Terraform configuration while keeping R0-cost CI planning intact.
+
+## Day 83: Plan Output Parsing & Module Contract Audit
+- Updated `.github/workflows/terraform.yml` to capture `dev` and `prod` Terraform plan logs and extract the `Plan:` summary line (`add` / `change` / `destroy`) directly into `$GITHUB_STEP_SUMMARY`.
+- Audited module interface wiring, environment defaults (`dev` vs. `prod`), and root outputs across the multi-module Terraform setup while keeping R0-cost CI execution intact.
