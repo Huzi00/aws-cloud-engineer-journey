@@ -68,4 +68,13 @@ jobs:
             echo "| --- | --- | --- |"
             echo "| \`dev\` | ${{ steps.plan_dev.outcome }} | ${DEV_PLAN} |"
             echo "| \`prod\` | ${{ steps.plan_prod.outcome }} | ${PROD_PLAN} |"
+            echo ""
+            for log in plan_dev.log plan_prod.log; do
+              if [ -f "$log" ]; then
+                DESTROYS=$(grep -oE '[0-9]+ to destroy' "$log" | awk '{print $1}' | head -n 1)
+                if [ -n "$DESTROYS" ] && [ "$DESTROYS" -gt 0 ]; then
+                  echo "> Warning: \`${log}\` proposes **${DESTROYS}** resource destruction(s)."
+                fi
+              fi
+            done
           } >> "$GITHUB_STEP_SUMMARY"

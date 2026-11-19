@@ -461,3 +461,7 @@ Centralized configuration management and secrets handling by building a reusable
 ## Day 83: Plan Output Parsing & Module Contract Audit
 - Updated `.github/workflows/terraform.yml` to capture `dev` and `prod` Terraform plan logs and extract the `Plan:` summary line (`add` / `change` / `destroy`) directly into `$GITHUB_STEP_SUMMARY`.
 - Audited module interface wiring, environment defaults (`dev` vs. `prod`), and root outputs across the multi-module Terraform setup while keeping R0-cost CI execution intact.
+
+## Day 84: Destroy-Action Guardrails & Plan Artifact Hygiene
+- Updated `Write Workspace Plan Summary` in `.github/workflows/terraform.yml` to parse `to destroy` counts from `dev` and `prod` plan logs and surface warnings in `$GITHUB_STEP_SUMMARY` whenever resource destructions are proposed.
+- Added `*.tfplan` and `plan_*.log` to `.gitignore` to keep temporary plan artifacts out of version control while maintaining R0-cost CI planning.
