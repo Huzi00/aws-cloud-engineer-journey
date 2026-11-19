@@ -443,3 +443,8 @@ Centralized configuration management and secrets handling by building a reusable
 - Enhanced GitHub Actions pipeline to automate multi-workspace `terraform plan` execution for both `dev` and `prod`.
 - Implemented automated formatting, validation, and dry-run infrastructure change previews on every push and pull request.
 - Maintained strict R0-cost architecture validation practices within automated pipelines.
+
+## Day 80: Manual Workflow Dispatch & Multi-Workspace CI Hardening
+- Added `workflow_dispatch` trigger support in GitHub Actions to run multi-workspace (`dev` and `prod`) Terraform planning on demand alongside `push` and `pull_request` events[cite: 20].
+- Gated `data.aws_ami.amazon_linux` behind `ci_ami_override` and formatted configurations with `terraform fmt` so `fmt -check`, `validate`, and workspace plans pass cleanly in CI[cite: 10, 11, 15, 18].
+- Preserved R0-cost dry-run validation across VPC, ALB, SG, ASG, DynamoDB, SSM, IAM, and CloudWatch/SNS modules without live AWS credentials.
