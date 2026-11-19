@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-  
+
 jobs:
   terraform-ci:
     name: "Terraform Validate & Plan"
@@ -41,11 +41,25 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan (Dev Workspace)
+        id: plan_dev
         run: |
           terraform workspace select -or-create dev
           terraform plan -input=false -refresh=false -no-color
 
       - name: Terraform Plan (Prod Workspace)
+        id: plan_prod
         run: |
           terraform workspace select -or-create prod
           terraform plan -input=false -refresh=false -no-color
+
+      - name: Write Workspace Plan Summary
+        if: always()
+        run: |
+          {
+            echo "## Terraform Plan Summary (\`${{ github.sha }}\`)"
+            echo ""
+            echo "| Workspace | Status | Details |"
+            echo "| --- | --- | --- |"
+            echo "| \`dev\` | \${{ steps.plan_dev.outcome }} | See \`Terraform Plan (Dev Workspace)\` logs |"
+            echo "| \`prod\` | \${{ steps.plan_prod.outcome }} | See \`Terraform Plan (Prod Workspace)\` logs |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -448,3 +448,8 @@ Centralized configuration management and secrets handling by building a reusable
 - Added `workflow_dispatch` trigger support in GitHub Actions to run multi-workspace (`dev` and `prod`) Terraform planning on demand alongside `push` and `pull_request` events[cite: 20].
 - Gated `data.aws_ami.amazon_linux` behind `ci_ami_override` and formatted configurations with `terraform fmt` so `fmt -check`, `validate`, and workspace plans pass cleanly in CI[cite: 10, 11, 15, 18].
 - Preserved R0-cost dry-run validation across VPC, ALB, SG, ASG, DynamoDB, SSM, IAM, and CloudWatch/SNS modules without live AWS credentials.
+
+## Day 81: Workspace Plan Summaries & Rollout Guardrails
+- Added step IDs (`plan_dev`, `plan_prod`) and a `Write Workspace Plan Summary` step in GitHub Actions to report `dev` and `prod` workspace plan outcomes in `$GITHUB_STEP_SUMMARY`.
+- Reviewed launch template lifecycle (`create_before_destroy`), ASG rolling instance refresh, and module dependencies across `module-14-terraform-modules/main.tf`.
+- Verified configuration validity with `terraform fmt -check -recursive` and `terraform validate` while keeping R0-cost CI planning intact.
